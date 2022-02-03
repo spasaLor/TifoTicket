@@ -9,11 +9,13 @@ public class Stadio {
     private String nome;
     private int capienza;
     private HashMap<String,Settore> listaSettori;
-    private ArrayList<Partita> listapartite;
+    private ArrayList<Partita> listaPartite;
 
     public Stadio(String nome, int capienza) {
         this.nome = nome;
         this.capienza = capienza;
+        this.listaSettori=new HashMap<>();
+        this.listaPartite= new ArrayList<>();
     }
 
     public String impostaPrezzo(String nomeSettore, float prezzoBiglietto) throws Exception {
@@ -51,11 +53,11 @@ public class Stadio {
         this.capienza = capienza;
     }
 
-    public ArrayList<Partita> getListapartite() {
+    public ArrayList<Partita> getListaPartite() {
         return listapartite;
     }  
     
-    public void setListapartite(ArrayList<Partita> listapartite) {
-        this.listapartite = listapartite;
+    public void setListaPartite(ArrayList<Partita> listaPartite) {
+        this.listaPartite = listaPartite;
     }
 }
