@@ -1,19 +1,31 @@
 package com.Tifoticket;
 
-import com.Tifoticket.Settore;
-import com.Tifoticket.Posto;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tribuna extends Settore{
     private List<Posto> listaPosti;
-
+    
     public Tribuna (String nome, int capienza){
         super(nome,capienza);
         listaPosti=new ArrayList();
         loadPosti();
     }
-
+    
+    public Posto sceltaPosto(int fila,int numero) throws Exception{
+         Posto po=null;
+          for(Posto p: listaPosti){
+               if(p.getFila()==fila && p.getNumero()==numero){
+                     po=p;
+               }
+          }
+          if(po!= null)
+               return po;
+          else 
+               throw new Exception("ERRORE: Impossibile scegliere il posto selezionato. Riprova con un altro posto.");
+          
+     }
+    
     public List<Posto> getListaPosti() {
         return listaPosti;
     }
@@ -21,7 +33,7 @@ public class Tribuna extends Settore{
     public void setListaPosti(ArrayList<Posto> listaPosti) {
         this.listaPosti = listaPosti;
     }
-
+    
     @Override
     public String toString() {
         return "Tribuna{" +

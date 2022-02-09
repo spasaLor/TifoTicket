@@ -3,7 +3,7 @@ package com.Tifoticket;
 public class Posto {
     private int fila;
     private int numero;
-    private boolean occupato;
+    //private boolean occupato;
 
     public Posto(int fila, int numero) {
         this.fila = fila;
@@ -26,20 +26,17 @@ public class Posto {
         this.numero = numero;
     }
 
-    public boolean isOccupato() {
+   /* public boolean isOccupato() {
         return occupato;
     }
 
     public void setOccupato(boolean occupato) {
         this.occupato = occupato;
     }
-
+*/
     @Override
     public String toString() {
-        return "Posto{" +
-                "fila=" + fila +
-                ", numero=" + numero +
-                ", occupato=" + occupato +
-                '}';
+        return "fila: " + fila + " numero: " + numero;
+                
     }
 }
