@@ -50,6 +50,7 @@ public class TifoTicket {
      public void confermaInserimento(){
         if(partitaCorrente != null){
             this.listaPartite.put(partitaCorrente.getCodice(),partitaCorrente);
+	    stadio.listaPartite.put(partitaCorrente.getCodice(),partitaCorrente);
             partitaCorrente=null;
             System.out.println("Inserimento partita concluso");
         }

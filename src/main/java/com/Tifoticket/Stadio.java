@@ -12,11 +12,14 @@ public class Stadio {
     private ArrayList<Partita> listaPartite;
     private Settore settoreScelto;
 
+
     public Stadio(String nome, int capienza) {
         listaSettori=new HashMap<>();
         listaPartite=new ArrayList<>(); 
         this.nome = nome;
         this.capienza = capienza;
+        this.listaSettori=new HashMap<>();
+        this.listaPartite= new ArrayList<>();
     }
 
     public String impostaPrezzo(String nomeSettore, float prezzoBiglietto) throws Exception {
@@ -81,6 +84,7 @@ public class Stadio {
 
     public ArrayList<Partita> getListaPartite() {
         return listaPartite;
+
     }  
     
     public void setListaPartite(ArrayList<Partita> listaPartite) {
