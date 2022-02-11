@@ -12,11 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 /**
  *
@@ -25,8 +27,8 @@ import org.junit.jupiter.api.Test;
 public class TestStadio {
      static Stadio st;
      
-     @BeforeAll
-     public static void init(){
+     @BeforeEach
+     public void init(){
           st=new Stadio("nomeStadio",30);
           Settore c1= new Curva("Curva Sud",5);
           Settore c2= new Curva("Curva Nord",5);
@@ -41,15 +43,13 @@ public class TestStadio {
           st.setListaSettori(settori);
      }
      
+   
+     
      @Test
      public void testImpostaPrezzo(){
           String res;
-          try {
-               res=st.impostaPrezzo("Curva Sud",100);
-               assertEquals("Prezzo biglietti inserito",res);
-          } catch (Exception ex) {
-               Logger.getLogger(TestStadio.class.getName()).log(Level.SEVERE, null, ex);
-          }    
+          res=st.impostaPrezzo("Curva Sud",100);
+          assertEquals("Prezzo biglietti inserito",res);    
      }
      
      @Test
@@ -77,17 +77,56 @@ public class TestStadio {
           assertEquals(2,st.getListaPartite().size());
           assertNotNull(st.getListaPartite().get(0));
      }
-     
+
      @Test
      public void testElencoDisponibili(){
-     assertNotNull(st.elencoPostiDisponibili("Tribuna Est"));    //LISTA COLLEGATA AD UNA TRIBUNA: ESISTE
-     try{
-          st.elencoPostiDisponibili("Tribuna Sud");  //LISTA COLLEGATA AD UNA CURVA: NON ESISTE QUINDI DARA' UNA NULLPOINTER EXCEPTION
-          fail();
-     }    
-     catch(NullPointerException ex){
-          System.out.println(ex.getMessage());
+          assertNotNull(st.elencoPostiDisponibili("Tribuna Est"));    //LISTA COLLEGATA AD UNA TRIBUNA: ESISTE
+          try{
+               st.elencoPostiDisponibili("Tribuna Sud");  //LISTA COLLEGATA AD UNA CURVA: NON ESISTE QUINDI DARA' UNA NULLPOINTER EXCEPTION
+               fail();
+          }    
+          catch(NullPointerException ex){
+               System.out.println("Expected error: "+ex.getMessage());
+          }
      }
-}
+     @Test
+     public void testDatiClienteAbb(){
+          try {
+               st.sceltaSettore("Curva Sud");
+          } catch (Exception ex) {
+               System.out.println("UNExpected error: "+ex.getMessage());
+          }
+          try {
+               st.datiClienteAbb("Lorenzo spadaro","ababab", 20);
+               assertNotNull(st.getAbbonamentoCorrente());
+               st.confermaAbbonamento();
+          } catch (Exception ex) {
+               System.out.println("UNExpected error: "+ex.getMessage());
+          }
+          try {
+               st.datiClienteAbb("Lorenzo spadaro","ababab", 30);
+               fail();
+          } catch (Exception ex) {
+               System.out.println("Expected error: "+ex.getMessage());
+          }
+     }
+     
+     @Test
+     public void testpostoAbbonamento(){
+          try {
+               st.sceltaSettore("Tribuna Est");
+               assertNotNull(st.postoAbbonamento(1, 10));
+          } catch (Exception ex) {
+               System.out.println("UNExpected error: "+ex.getMessage());
+          }
+          try {
+               st.sceltaSettore("Tribuna Est");
+               st.postoAbbonamento(2, 10);
+               fail();
+          } catch (Exception ex) {
+               System.out.println("Expected error: "+ex.getMessage());
+          }
           
+     }
+     
 }

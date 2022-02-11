@@ -23,7 +23,7 @@ public class Partita {
         this.listaBiglietti=new ArrayList<>();
     }
 
-    public String impostaPrezzoBiglietti(String nomeSettore,float prezzo) throws Exception{
+    public String impostaPrezzoBiglietti(String nomeSettore,float prezzo){
         String res;
         res=stadio.impostaPrezzo(nomeSettore,prezzo);
         return res;
@@ -32,7 +32,7 @@ public class Partita {
     public int sceltaSettore(String nomeSettore) throws Exception{
           int posti_liberi=0;
           Settore se=stadio.sceltaSettore(nomeSettore);
-          posti_liberi=se.getCapienza()-se.getListaBiglietti().size();  //CAPIENZA DEL SETTORE - BIGLIETTI VENDUTI= POSTI LIBERI
+          posti_liberi=se.getCapienza()-se.getListaBiglietti().size()-stadio.getListaAbbonamenti().size();
           if(posti_liberi>0){
                String codiceBiglietto=UUID.randomUUID().toString().substring(0,5);
                bigliettoCorrente=new Biglietto(codiceBiglietto,this,se);
@@ -40,19 +40,14 @@ public class Partita {
           return posti_liberi;     
     }
 
-    public String sceltaPosto(int fila,int numero){
-         Posto po=null;
-         String res=null;
-         try {
-              po=stadio.sceltaPosto(fila,numero);
-              if(po!=null){
-                    bigliettoCorrente.setPosto(po);
-                    res="Il posto scelto è stato selezionato correttamente.";
-              }
-  
-         } catch (Exception ex) {
-              System.out.println(ex.getMessage());
-         }
+    public String sceltaPosto(int fila,int numero) throws Exception{
+          Posto po=null;
+          String res=null;
+          po=stadio.sceltaPosto(fila,numero);
+          if(po!=null){
+                bigliettoCorrente.setPosto(po);
+                res="Il posto scelto è stato selezionato correttamente.";
+          }
          return res;
     }
     
@@ -158,7 +153,7 @@ public class Partita {
     @Override
     public String toString() {
         return "Furci vs " + avversario +", partita di: " + tipologia 
-                +" del "+ data.getDayOfMonth()+"/"+data.getMonth()+"/"+data.getYear()+" Orario: "+data.getHour()+":"+data.getMinute();
+                +" del "+ data.getDayOfMonth()+"/"+data.getMonthValue()+"/"+data.getYear()+" Orario: "+data.getHour()+":"+data.getMinute();
     }
     
     public boolean equalsAvversario(String avv){

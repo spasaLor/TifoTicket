@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Stadio {
     private String nome;
@@ -11,7 +12,8 @@ public class Stadio {
     private Map<String,Settore> listaSettori;
     private ArrayList<Partita> listaPartite;
     private Settore settoreScelto;
-
+    private Abbonamento abbonamentoCorrente;
+    private List<Abbonamento> listaAbbonamenti;
 
     public Stadio(String nome, int capienza) {
         listaSettori=new HashMap<>();
@@ -20,17 +22,13 @@ public class Stadio {
         this.capienza = capienza;
         this.listaSettori=new HashMap<>();
         this.listaPartite= new ArrayList<>();
+        this.listaAbbonamenti=new ArrayList<>();
     }
 
-    public String impostaPrezzo(String nomeSettore, float prezzoBiglietto) throws Exception {
+    public String impostaPrezzo(String nomeSettore, float prezzoBiglietto){
         Settore se= listaSettori.get(nomeSettore);
-        if(se != null) {
-            se.setPrezzoBiglietto(prezzoBiglietto);
-            return "Prezzo biglietti inserito";
-        }
-        else{
-            throw new Exception("Settore inesistente,riprova");
-        }
+        se.setPrezzoBiglietto(prezzoBiglietto);
+        return "Prezzo biglietti inserito";
     }
     
     public Settore sceltaSettore(String nomeSettore) throws Exception{
@@ -44,10 +42,10 @@ public class Stadio {
 
     public List<Posto> elencoPostiDisponibili(String nomeSettore){
          Tribuna tr= (Tribuna)listaSettori.get(nomeSettore);
-         List <Posto> listaDisponibili=tr.getListaPosti();
-         for(Biglietto b : tr.getListaBiglietti()){
-              Posto tmp=b.getPosto();
-              if(tmp.getFila()==b.getPosto().getFila() && tmp.getNumero() == b.getPosto().getNumero())
+         List <Posto> listaDisponibili=tr.elencoPostiDisponibili();
+         for(Abbonamento a : this.getListaAbbonamenti()){
+              Posto tmp=a.getPosto();
+              if(tmp.getFila()==a.getPosto().getFila() && tmp.getNumero() == a.getPosto().getNumero())
                    listaDisponibili.remove(tmp);
          }
          return listaDisponibili;
@@ -56,6 +54,40 @@ public class Stadio {
     public Posto sceltaPosto(int fila,int numero) throws Exception{
          Tribuna tr=(Tribuna)settoreScelto;
          return tr.sceltaPosto(fila,numero);
+    }
+    
+    public void datiClienteAbb(String nominativo,String CF,int eta) throws Exception{
+          for(Abbonamento a: listaAbbonamenti){
+              if(a.getCF().equals(CF))
+                   throw new Exception("A questo codice fiscale è già associato un abbonamento valido.");
+         }
+         abbonamentoCorrente=new Abbonamento(nominativo,eta,settoreScelto);
+         abbonamentoCorrente.setCF(CF);
+         
+         float prezzo=settoreScelto.calcolaPrezzoAbb(abbonamentoCorrente);
+         abbonamentoCorrente.setPrezzo(prezzo);
+         
+         String codice=UUID.randomUUID().toString().substring(0,5);
+         abbonamentoCorrente.setCodice(codice);
+         
+         for(Partita p: listaPartite){
+              if(p.getTipologia().equals("Campionato"))
+                   abbonamentoCorrente.getListaPartiteValide().add(p);
+         }
+    }
+    
+    public Posto postoAbbonamento(int fila,int numero) throws Exception{
+          Tribuna tr=(Tribuna)settoreScelto;
+          Posto po=tr.postoAbbonamento(fila,numero);
+          abbonamentoCorrente.setPosto(po);
+          return po;
+     }
+    
+    public Abbonamento confermaAbbonamento(){
+         this.listaAbbonamenti.add(abbonamentoCorrente);
+         Abbonamento tmp=abbonamentoCorrente;
+         abbonamentoCorrente=null;
+         return tmp;
     }
     
     public Map<String, Settore> getListaSettori() {
@@ -90,4 +122,29 @@ public class Stadio {
     public void setListaPartite(ArrayList<Partita> listaPartite) {
         this.listaPartite = listaPartite;
     }
+
+     public List<Abbonamento> getListaAbbonamenti() {
+          return listaAbbonamenti;
+     }
+
+     public void setListaAbbonamenti(List<Abbonamento> listaAbbonamenti) {
+          this.listaAbbonamenti = listaAbbonamenti;
+     }
+
+     public Abbonamento getAbbonamentoCorrente() {
+          return abbonamentoCorrente;
+     }
+
+     public void setAbbonamentoCorrente(Abbonamento abbonamentoCorrente) {
+          this.abbonamentoCorrente = abbonamentoCorrente;
+     }
+
+     public Settore getSettoreScelto() {
+          return settoreScelto;
+     }
+
+     public void setSettoreScelto(Settore settoreScelto) {
+          this.settoreScelto = settoreScelto;
+     }
+    
 }

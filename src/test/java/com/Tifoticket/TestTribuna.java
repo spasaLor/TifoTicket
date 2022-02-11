@@ -7,6 +7,7 @@ package com.Tifoticket;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ public class TestTribuna {
           try {
                assertNotNull(se.sceltaPosto(1, 10));
           } catch (Exception ex) {
-               ex.getMessage();
+               System.err.println("Unexpected error: "+ex.getMessage());
           }
           //FALLISCE PERCHE' HO UNA FILA DA 10 POSTI
           try{
@@ -37,8 +38,12 @@ public class TestTribuna {
                fail();
           }
           catch(Exception e){
-               System.err.println(e.getMessage());
+               System.err.println("Expected error: "+e.getMessage());
           }
      }
-     
+     @Test
+     public void testElencoPostiDisponibili(){
+          assertNotNull(se.elencoPostiDisponibili());
+          assertEquals(10,se.elencoPostiDisponibili().size());
+     }
 }

@@ -86,14 +86,14 @@ public class Biglietto {
                return "Stampa biglietto in corso...\n" + "Codice biglietto: " + codice + "\n"
                   +"Nominativo: " + nominativo + ", eta: " + eta+"\n"
                   +"Valido per la partita: "+partita+ "\n"
-                  + "Prezzo: " + prezzo + "\n"
+                  + "Prezzo: € " + prezzo + "\n"
                   + "Settore: " + settore.getNome() + ", Posto:  ";
           else
               return "Stampa biglietto in corso...\n" + "Codice biglietto: " + codice + "\n"
                   +"Nominativo: " + nominativo + ", eta: " + eta+"\n"
                   +"Valido per la partita: "+partita+ "\n"
-                  + "Prezzo: " + prezzo + "\n"
-                  + "Settore: " + settore.getNome() +", "+posto; 
+                  + "Prezzo: € " + prezzo+
+                  "\nSettore: " + settore.getNome() +", "+posto; 
      }
      
      

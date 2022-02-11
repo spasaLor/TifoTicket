@@ -49,15 +49,15 @@ public class TestPartita {
      }
      
      @Test
-     public void testSceltaSettore(){   //CONTROLLA CHE IN UNA PARTITA APPENA INSERITA I POSTI DISPONIBILI SIANO UGUALI ALLA CAPIENZA DEI SETTORI
-          
+     public void testSceltaSettore(){   //CONTROLLA CHE IN UNA PARTITA APPENA INSERITA I POSTI DISPONIBILI
+                                        //SIANO UGUALI ALLA CAPIENZA DEI SETTORI
           try {
                assertEquals(5,pa.sceltaSettore("Curva Sud"));
                assertEquals(5,pa.sceltaSettore("Curva Nord"));
                assertEquals(10,pa.sceltaSettore("Tribuna Est"));
                assertEquals(10,pa.sceltaSettore("Tribuna Ovest"));
           } catch (Exception ex) {
-               Logger.getLogger(TestPartita.class.getName()).log(Level.SEVERE, null, ex);
+               System.err.println("Unexpectd error: "+ex.getMessage());
           }
      }
      
@@ -67,13 +67,22 @@ public class TestPartita {
           try {
                pa.sceltaSettore("Tribuna Est");
           } catch (Exception ex) {
-               Logger.getLogger(TestPartita.class.getName()).log(Level.SEVERE, null, ex);
+               System.err.println("Unexpectd error: "+ex.getMessage());
           }
-          String res=pa.sceltaPosto(1, 1);
-          assertEquals(res,"Il posto scelto è stato selezionato correttamente.");
-          
-          //FALLISCE PERCHE' SCELGO UN POSTO CHE NON ESISTE
-          assertNull(pa.sceltaPosto(2, 1));
+          String res;
+          try {
+               res = pa.sceltaPosto(1, 1);
+               assertEquals(res,"Il posto scelto è stato selezionato correttamente.");
+          } catch (Exception ex) {
+               System.err.println("Unexpectd error: "+ex.getMessage());
+          }
+          try {
+               //FALLISCE PERCHE' SCELGO UN POSTO CHE NON ESISTE
+               pa.sceltaPosto(2, 1);
+               fail();
+          } catch (Exception ex) {
+               System.err.println("Expectd error: "+ex.getMessage());
+          }
          
      }
      
@@ -85,16 +94,14 @@ public class TestPartita {
                fail();
           }
           catch(NullPointerException ex){
-               System.err.println(ex.getMessage());
+               System.err.println("Expected error: "+ex.getMessage());
           }
           //ACQUISTO VALIDO 
           try {
                pa.sceltaSettore("Tribuna Est");
+               assertNotNull(pa.confermaAcquisto()); 
           } catch (Exception ex) {
-               Logger.getLogger(TestPartita.class.getName()).log(Level.SEVERE, null, ex);
-          }
-          assertNotNull(pa.confermaAcquisto()); 
-          
+               System.err.println("Unexpected error: "+ex.getMessage());
+          }          
      }
-     
 }

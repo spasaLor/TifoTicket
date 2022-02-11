@@ -14,6 +14,8 @@ public abstract class Settore {
         this.capienza = capienza;
         this.listaBiglietti=new ArrayList<>();
     }
+    
+    public abstract float calcolaPrezzoAbb(Abbonamento a);
 
     public String getNome() {
         return nome;
@@ -46,8 +48,6 @@ public abstract class Settore {
      public void setListaBiglietti(List<Biglietto> listaBiglietti) {
           this.listaBiglietti = listaBiglietti;
      }
-    
-    
 
     @Override
     public boolean equals(Object o) {
