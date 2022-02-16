@@ -27,29 +27,29 @@ public class Tribuna extends Settore{
      }
     
     public List<Posto> elencoPostiDisponibili(){
-         List<Posto> postiDisponibili= this.listaPosti;
-         
+         List<Posto> postiDisponibili= this.listaPosti;         
          for(Biglietto b : this.getListaBiglietti()){
               Posto tmp=b.getPosto();
-              if(tmp.getFila()==b.getPosto().getFila() && tmp.getNumero() == b.getPosto().getNumero())
-                   postiDisponibili.remove(tmp);
+                 postiDisponibili.remove(tmp);
          }
          return postiDisponibili;
     }
     
     @Override
-    public float calcolaPrezzoAbb(Abbonamento a){
+    public void calcolaPrezzoAbb(Settore se){
+         Tessera t= se.getAbbonamentoCorrente();
+         
          float prezzo=0;
-         if(a.getEta()<18)
+         if(t.getEta()<18)
               prezzo=250;
-         else if(a.getEta()>18 && a.getEta()<65)
+         else if(t.getEta()>18 && t.getEta()<65)
               prezzo= 450;
-         else if(a.getEta()>65)
+         else if(t.getEta()>65)
               prezzo=300;
-         return prezzo;
+         t.setPrezzo(prezzo);
     }
     
-    public Posto postoAbbonamento(int fila,int numero) throws Exception{
+    public Posto scegliPostoAbbonamento(int fila,int numero) throws Exception{
          Posto po=null;
           for(Posto p: listaPosti){
                if(p.getFila()==fila && p.getNumero()==numero){

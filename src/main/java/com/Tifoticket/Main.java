@@ -11,13 +11,9 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
+import java.time.format.DateTimeParseException;
+import java.util.ConcurrentModificationException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
-
 /**
  *
  * @author arcap
@@ -33,10 +29,9 @@ public class Main {
           System.out.println("Scelta-> ");
      }
      
-     public static void main(String args[]){      //TODO: CONTROLLI SU TUTTE LE FUNZIONI PER GLI ERRORI, LE SOVRAPPOSIZIONI
+     public static void main(String args[]){
           TifoTicket tifoticket=TifoTicket.getInstance();
           BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-          boolean uscita=false;
           int scelta=0;
           
           do{
@@ -50,6 +45,7 @@ public class Main {
                               System.out.println("Inserisci la data della partita: ");
                               String data=br.readLine();
                               LocalDate ld=LocalDate.parse(data);
+                              
                               System.out.println("Inserisci l'ora della partita: ");
                               String ora=br.readLine();
                               LocalTime lt=LocalTime.parse(ora);
@@ -82,9 +78,13 @@ public class Main {
                               System.out.println("Inserisci il nome della squadra avversaria ");
                               String avversario=br.readLine();
                               Map<String,Partita> pa= tifoticket.cercaPartita(avversario);
-                              System.out.println(pa.toString());
-                              if(pa.isEmpty())
+                              System.out.println("Elenco partite trovate:");
+                              for(Map.Entry<String,Partita>entry : pa.entrySet())
+                                   System.out.println("Codice: "+entry.getKey()+" -> "+entry.getValue());
+                              if(pa.isEmpty()){
+                                   System.err.println("Nessuna partita trovata.");
                                    break;
+                              }
                               else{
                                    System.out.println("Scegli la partita tramite il codice: ");
                                    codice=br.readLine();
@@ -95,10 +95,14 @@ public class Main {
                               {
                                    try {
                                         tifoticket.sceltaSettore(settore);
-                                   } catch (Exception ex) {
-                                        System.err.println(ex.getMessage());
-                                        break;
                                    }
+                                   catch(ConcurrentModificationException cme){
+                                        System.out.println(tifoticket.getPartitaScelta().getStadio().elencoPostiDisponibili(settore).toString());
+                                   }
+                                   catch (Exception ex) {
+                                        System.out.println(ex.getMessage());
+                                   }
+                                   
                               }
                                    if(settore.contains("Tribuna")){
                                         System.out.println("Inserisci la fila: ");
@@ -116,7 +120,7 @@ public class Main {
                                         }
                                    }           
 
-                                   System.out.println("Inserisci le nome e cognome del cliente: ");
+                                   System.out.println("Inserisci nome e cognome del cliente: ");
                                    String nominativo=br.readLine();
                                    System.out.println("Inserisci l'età del cliente: ");
                                    int eta=Integer.parseInt(br.readLine());
@@ -187,6 +191,9 @@ public class Main {
                } catch (IOException ex) {
                     System.err.println(ex.getMessage());
                }
+               catch(DateTimeParseException dtpe){
+                    System.err.println("Formato data/ora incorretto. Formati corretti:(AAAA-MM-GG) / (HH:mm)");
+              }
          }while(scelta!=4);    
      }
 }

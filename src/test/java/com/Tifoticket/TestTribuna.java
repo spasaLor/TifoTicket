@@ -5,8 +5,6 @@
  */
 package com.Tifoticket;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -17,7 +15,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author arcap
  */
-public class TestTribuna {
+ class TestTribuna {
      Tribuna se;
      @BeforeEach
      public void init(){
@@ -25,7 +23,7 @@ public class TestTribuna {
      }
      
      @Test
-     public void testSceltaPosto(){
+      void testSceltaPosto(){
           //SCELTA CORRETTA
           try {
                assertNotNull(se.sceltaPosto(1, 10));
@@ -42,7 +40,7 @@ public class TestTribuna {
           }
      }
      @Test
-     public void testElencoPostiDisponibili(){
+      void testElencoPostiDisponibili(){
           assertNotNull(se.elencoPostiDisponibili());
           assertEquals(10,se.elencoPostiDisponibili().size());
      }

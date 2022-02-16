@@ -10,7 +10,7 @@ public class Partita {
     private LocalDateTime data;
     private String avversario;
     private String tipologia;
-    private Biglietto bigliettoCorrente;
+    private Tessera bigliettoCorrente;
     private Stadio stadio;
     private List<Biglietto> listaBiglietti;
 
@@ -19,7 +19,10 @@ public class Partita {
         this.data = data;
         this.avversario = avversario;
         this.tipologia = tipologia;
-        this.stadio=stadio;
+        if(stadio!=null)
+             this.stadio=stadio;
+        else
+             this.stadio=new Stadio("Furci",30);
         this.listaBiglietti=new ArrayList<>();
     }
 
@@ -32,10 +35,10 @@ public class Partita {
     public int sceltaSettore(String nomeSettore) throws Exception{
           int posti_liberi=0;
           Settore se=stadio.sceltaSettore(nomeSettore);
-          posti_liberi=se.getCapienza()-se.getListaBiglietti().size()-stadio.getListaAbbonamenti().size();
+          posti_liberi=se.getCapienza()-se.getListaBiglietti().size()-se.getListaAbbonamenti().size();
           if(posti_liberi>0){
                String codiceBiglietto=UUID.randomUUID().toString().substring(0,5);
-               bigliettoCorrente=new Biglietto(codiceBiglietto,this,se);
+               bigliettoCorrente=new Biglietto(codiceBiglietto,se,this);
           }
           return posti_liberi;     
     }
@@ -58,40 +61,24 @@ public class Partita {
     }
     
     public Biglietto confermaAcquisto(){
-         float prezzo=calcolaPrezzo();
          Settore se=bigliettoCorrente.getSettore();
          
-         bigliettoCorrente.setPrezzo(prezzo);
-         listaBiglietti.add(bigliettoCorrente);
-         se.getListaBiglietti().add(bigliettoCorrente);
+         bigliettoCorrente.setPrezzo(calcolaPrezzo());
+         listaBiglietti.add((Biglietto)bigliettoCorrente);
+         se.getListaBiglietti().add((Biglietto)bigliettoCorrente);
          
-         Biglietto tmp=bigliettoCorrente;
+         Biglietto tmp=(Biglietto)bigliettoCorrente;
          
          bigliettoCorrente=null;
          return tmp;
     }
     
     public float calcolaPrezzo(){
-         Settore se=bigliettoCorrente.getSettore();
-         int eta=bigliettoCorrente.getEta();
-         float base=se.getPrezzoBiglietto();
-         float prezzo=0;
+         PrezzoStrategyFactory pf= PrezzoStrategyFactory.getInstance();
+         PrezzoStrategyInterface pi= pf.getPrezzoStrategy();
+         float prezzoFinale=pi.applicaTariffa(bigliettoCorrente);
          
-         if(eta<16 && this.tipologia.equals("Campionato"))
-              prezzo= base - ((base *15)/100);
-         else if(eta<16 && this.tipologia.equals("Coppa Nazionale"))
-              prezzo= base - ((base * 25)/100);
-         else if(eta<16 && this.tipologia.equals("Coppa Continentale"))
-              prezzo= base + ((base *15)/100);
-         else if(eta>65 && this.tipologia.equals("Campionato"))
-              prezzo= base - ((base *15)/100);
-         else if(eta>65 && this.tipologia.equals("Coppa Nazionale"))
-              prezzo= base - ((base * 25)/100);
-         else if(eta>65 && this.tipologia.equals("Coppa Continentale"))
-              prezzo= base + ((base *15)/100);
-         else
-              prezzo=base;
-         return prezzo;
+         return prezzoFinale;
     }
     
     public String getCodice() {
@@ -126,11 +113,11 @@ public class Partita {
         this.tipologia = tipologia;
     }
 
-     public Biglietto getBigliettoCorrente() {
+     public Tessera getBigliettoCorrente() {
           return bigliettoCorrente;
      }
 
-     public void setBigliettoCorrente(Biglietto bigliettocorrente) {
+     public void setBigliettoCorrente(Tessera bigliettocorrente) {
           this.bigliettoCorrente = bigliettocorrente;
      }
 

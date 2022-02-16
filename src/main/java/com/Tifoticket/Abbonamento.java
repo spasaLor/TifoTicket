@@ -5,84 +5,17 @@
  */
 package com.Tifoticket;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author arcap
  */
-public class Abbonamento {
-     private String codice;
-     private int eta;
-     private String nominativo;
-     private float prezzo;
-     private Posto posto;
+public class Abbonamento extends Tessera{
      private String CF;
-     private Settore settore;
-     private List<Partita> listaPartiteValide;
-             
-     public Abbonamento(String nominativo, int eta,Settore settore) {
-          this.eta = eta;
-          this.nominativo = nominativo;
-          this.settore=settore;
-          listaPartiteValide=new ArrayList<>();
-     }
      
-     public String getCodice() {
-          return codice;
-     }
-
-     public void setCodice(String codice) {
-          this.codice = codice;
-     }
-
-     public int getEta() {
-          return eta;
-     }
-
-     public void setEta(int eta) {
-          this.eta = eta;
-     }
-
-     public String getNominativo() {
-          return nominativo;
-     }
-
-     public void setNominativo(String nominativo) {
-          this.nominativo = nominativo;
-     }
-
-     public float getPrezzo() {
-          return prezzo;
-     }
-
-     public void setPrezzo(float prezzo) {
-          this.prezzo = prezzo;
-     }
-
-     public Posto getPosto() {
-          return posto;
-     }
-
-     public void setPosto(Posto posto) {
-          this.posto = posto;
-     }
-
-     public Settore getSettore() {
-          return settore;
-     }
-
-     public void setSettore(Settore settore) {
-          this.settore = settore;
-     }
-
-     public List<Partita> getListaPartiteValide() {
-          return listaPartiteValide;
-     }
-
-     public void setListaPartiteValide(List<Partita> listaPartiteValide) {
-          this.listaPartiteValide = listaPartiteValide;
+     public Abbonamento(String nominativo,String codice,Settore settore,String CF) {
+          super(codice,nominativo,settore,null);
+          this.CF=CF;
      }
 
      public String getCF() {
@@ -92,18 +25,16 @@ public class Abbonamento {
      public void setCF(String CF) {
           this.CF = CF;
      }
-     
-     
 
      @Override
      public String toString() {
-          if(posto == null)
-                return "Stampa abbonamento in corso...\n" + "codice:" + codice + "\nNominativo: " + nominativo + ", età: " + eta +
-                  "\nPrezzo: € " + prezzo +", Settore: " + settore.getNome() + 
+          if(super.getPosto() == null)
+                return "Stampa abbonamento in corso...\n" + "Codice Abbonamento: " + super.getCodice() + "\nNominativo: " + super.getNominativo() + ", età: " + super.getEta() +
+                  "\nPrezzo: € " + super.getPrezzo() +", Settore: " + super.getSettore().getNome() + 
                   "\nValido per: tutte le partite di Campionato";
           else
-               return "Stampa abbonamento in corso...\n" + "codice:" + codice + "\nNominativo: " + nominativo + ", età: " + eta +
-                  "\nPrezzo: € " + prezzo +", Settore: " + settore.getNome() + posto + 
+               return "Stampa abbonamento in corso...\n" + "Codice Abbonamento: " + super.getCodice() + "\nNominativo: " + super.getNominativo() + ", età: " + super.getEta() +
+                  "\nPrezzo: € " + super.getPrezzo() +", Settore: " + super.getSettore().getNome()+" ,Posto:"+ super.getPosto() + 
                   "\nValido per: tutte le partite di Campionato";
      }
 }

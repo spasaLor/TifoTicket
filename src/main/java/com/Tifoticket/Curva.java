@@ -7,14 +7,17 @@ public class Curva extends Settore{
     }
     
     @Override
-    public float calcolaPrezzoAbb(Abbonamento abb){
+    public void calcolaPrezzoAbb(Settore se){
+         Tessera t=se.getAbbonamentoCorrente();
+         
          float prezzo=0;
-         if(abb.getEta()<18)
+         if(t.getEta()<18)
               prezzo=150;
-         else if(abb.getEta()>18 && abb.getEta()<65)
+         else if(t.getEta()>18 && t.getEta()<65)
               prezzo= 200;
-         else if(abb.getEta()>65)
+         else if(t.getEta()>65)
               prezzo=250;
-         return prezzo;
+         
+         t.setPrezzo(prezzo);
     }
 }

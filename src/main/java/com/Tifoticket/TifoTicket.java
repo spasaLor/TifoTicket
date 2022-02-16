@@ -1,12 +1,8 @@
 package com.Tifoticket;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TifoTicket {
     private static TifoTicket tifoticket;
@@ -18,7 +14,6 @@ public class TifoTicket {
     private TifoTicket(){
          stadio=new Stadio("Furci",30);
          this.listaPartite= new HashMap<>();
-         loadSettori();
     }
     public static TifoTicket getInstance(){
         if (tifoticket ==null)
@@ -33,8 +28,12 @@ public class TifoTicket {
         if (p==null){
              if(!controllaSovrapposizione(data)){//se non si sovrappone con altre partite
                   if(tipologia.equals("Campionato")||tipologia.equals("Coppa")||tipologia.equals("Coppa Europea")){
-                    this.partitaCorrente= new Partita(codice,data,avversario,tipologia,stadio);
-                    System.out.println("Partita inserita");
+                       if(tipologia.equals("Campionato"))
+                         this.partitaCorrente= new Partita(codice,data,avversario,tipologia,stadio);
+                       else
+                            this.partitaCorrente=new Partita(codice,data,avversario,tipologia,null);
+                        System.out.println("Partita inserita");
+                       
                   }
                   else{
                        System.err.println("ERRORE: Errore nell'immissione della tipologia.");
@@ -80,24 +79,21 @@ public class TifoTicket {
           Map<String,Partita> partiteTrovate=new HashMap<>();
           for(Map.Entry<String,Partita> entry : listaPartite.entrySet()){
                if(entry.getValue().equalsAvversario(avversario))
-                     //partitaScelta = entry.getValue();
                     partiteTrovate.put(entry.getKey(), entry.getValue());
-               else
-                    System.err.println("ERRORE: Partita non trovata.");
           }
-          //return partitaScelta;
           return partiteTrovate;
      }
      
      public void sceltaSettore(String nomeSettore) throws Exception{
           int posti_liberi=0;
           posti_liberi = partitaScelta.sceltaSettore(nomeSettore);
+          Stadio st=partitaScelta.getStadio();
           if (posti_liberi==0)
                System.err.println("ERRORE: Settore pieno. Scegli un altro settore.");
           else{
                System.out.println("Ci sono ancora "+posti_liberi+" posti disponibili in "+nomeSettore+".");
                if(nomeSettore.contains("Tribuna"))
-                    System.out.println("Elenco posti liberi in tribuna:\n"+stadio.elencoPostiDisponibili(nomeSettore).toString());
+                    System.out.println("Elenco posti liberi in tribuna:\n"+st.elencoPostiDisponibili(nomeSettore).toString());
           }
      }
      
@@ -117,8 +113,7 @@ public class TifoTicket {
      
      public int settoreAbbonamento(String nomeSettore) throws Exception{
           Settore se=stadio.sceltaSettore(nomeSettore);
-          //NEL MAIN CONTROLLO SE I POSTI SONO >0
-          int posti_liberi= se.getCapienza()-stadio.getListaAbbonamenti().size()-se.getListaBiglietti().size();
+          int posti_liberi= se.getCapienza()-se.getListaAbbonamenti().size();
           if(nomeSettore.contains("Tribuna"))
                 System.out.println("Elenco posti liberi in tribuna:\n"+stadio.elencoPostiDisponibili(nomeSettore).toString());
           return posti_liberi;
@@ -129,27 +124,15 @@ public class TifoTicket {
      }
      
      public void postoAbbonamento(int fila,int numero) throws Exception{
-          stadio.postoAbbonamento(fila,numero);
+          Posto po=stadio.postoAbbonamento(fila,numero);
+          if(po!=null)
+               System.out.println("Posto scelto correttamente");
+          
      }
      
      public Abbonamento confermaAbbonamento(){
           return stadio.confermaAbbonamento();
      }
-     
-    public void loadSettori(){
-        Settore c1=new Curva("Curva Sud",5);
-        Settore c2=new Curva("Curva Nord",5);
-        Settore t1=new Tribuna("Tribuna Est",10);
-        Settore t2=new Tribuna("Tribuna Ovest",10);
-   
-        HashMap<String,Settore> settori=new HashMap();
-        settori.put("Curva Sud",c1);
-        settori.put("Curva Nord",c2);
-        settori.put("Tribuna Est",t1);
-        settori.put("Tribuna Ovest",t2);
-        stadio.setListaSettori(settori);
-        System.out.println("Settori caricati");
-    }
 
     public Partita getPartitaCorrente() {
         return partitaCorrente;
