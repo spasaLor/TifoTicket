@@ -74,8 +74,7 @@ import org.junit.jupiter.api.Test;
                tifoticket.inserimentoNuovaPartita(codice, ldt, avversario, tipo);
                tifoticket.confermaInserimento();
 
-               assertNotNull(tifoticket.getListaPartite());
-               assertNotNull(tifoticket.getStadio().getListaPartite());
+               assertEquals(2,tifoticket.getListaPartite().size());
          }
          catch(Exception e){
               System.err.println("unexpected error: "+e.getMessage());

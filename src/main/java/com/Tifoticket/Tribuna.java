@@ -99,6 +99,5 @@ public class Tribuna extends Settore{
         this.listaPosti.add(p8);
         this.listaPosti.add(p9);
         this.listaPosti.add(p10);
-        System.out.println("caricamento posti tribuna "+nome+" completato");
     }
 }

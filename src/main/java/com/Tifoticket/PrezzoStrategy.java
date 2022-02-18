@@ -37,7 +37,12 @@ public class PrezzoStrategy implements PrezzoStrategyInterface{
                          prezzo=base;
                     break;
                case "Coppa Europea": 
-                    prezzo= base + ((base *20)/100);
+                    if(eta<14)
+                         prezzo= base - ((base *10)/100);
+                    else if(eta>65)
+                         prezzo= base - ((base *15)/100);
+                    else
+                         prezzo=base;
                     break;
           }
           return prezzo;

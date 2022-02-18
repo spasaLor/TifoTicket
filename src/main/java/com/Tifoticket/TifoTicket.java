@@ -19,7 +19,7 @@ public class TifoTicket {
         if (tifoticket ==null)
             tifoticket= new TifoTicket();
         else
-            System.out.println("Istanza giÃ  creata");
+            System.out.println("Istanza già  creata");
         return tifoticket;
     }
 
@@ -33,7 +33,6 @@ public class TifoTicket {
                        else
                             this.partitaCorrente=new Partita(codice,data,avversario,tipologia,null);
                         System.out.println("Partita inserita");
-                       
                   }
                   else{
                        System.err.println("ERRORE: Errore nell'immissione della tipologia.");
@@ -53,7 +52,7 @@ public class TifoTicket {
     }
     
     public boolean controllaSovrapposizione(LocalDateTime data){
-         for(Map.Entry<String,Partita>entry: listaPartite.entrySet() ){
+         for(Map.Entry<String,Partita>entry: listaPartite.entrySet()){
               if(entry.getValue().getData().isEqual(data))
                    return true; //si sovrappone                        
           }
@@ -128,6 +127,27 @@ public class TifoTicket {
           if(po!=null)
                System.out.println("Posto scelto correttamente");
           
+     }
+     
+     public void getDatiVendite(){
+          int counterTot=0;
+          float incassoTot=0;
+          for(Map.Entry<String,Partita> entry : listaPartite.entrySet()){
+               Partita pa=entry.getValue();
+               int counter=0;
+               float incasso=0;
+               for(Biglietto bi: pa.getListaBiglietti()){
+                    counter++;
+                    incasso+=bi.getPrezzo();
+               }
+               counterTot+=counter;
+               incassoTot+=incasso;
+               System.out.println("Partita: Furci vs. "+pa.getAvversario()+", partita di: "+pa.getTipologia()+
+               " del "+pa.getData().getDayOfMonth()+"/"
+               +pa.getData().getMonthValue()+"/"+pa.getData().getYear()
+               +"\nBiglietti venduti: "+counter+"/"+stadio.getCapienza()+", Incasso: € "+incasso+"\n");
+          }
+          System.out.println("Totale biglietti venduti: "+counterTot+", Incasso totale: € "+incassoTot);
      }
      
      public Abbonamento confermaAbbonamento(){

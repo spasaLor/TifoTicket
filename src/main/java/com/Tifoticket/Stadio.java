@@ -34,7 +34,7 @@ public class Stadio {
               return settoreScelto;
          }
          else
-              throw new Exception("ERRORE. Settore non trovato");
+              throw new Exception("ERRORE. Settore non trovato.");
     }
 
     public List<Posto> elencoPostiDisponibili(String nomeSettore){
@@ -81,7 +81,6 @@ public class Stadio {
         settori.put("Tribuna Est",t1);
         settori.put("Tribuna Ovest",t2);
         this.setListaSettori(settori);
-        System.out.println("Settori caricati");
     }
 
     
