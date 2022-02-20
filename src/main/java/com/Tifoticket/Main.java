@@ -12,7 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.Map;
 /**
  *
@@ -25,8 +27,9 @@ public class Main {
           System.out.println("1. Inserimento nuova Partita");
           System.out.println("2. Vendita Biglietto");
           System.out.println("3. Vendita Abbonamento");
-          System.out.println("4. Visualizza informazioni vendite biglietti");
-          System.out.println("5. USCITA");
+          System.out.println("4. Visualizza informazioni vendite per una specifica partita");
+          System.out.println("5. Visualizza informazioni vendite biglietti complessive");
+          System.out.println("6. USCITA");
           System.out.println("Scelta-> ");
      }
      
@@ -55,7 +58,7 @@ public class Main {
                               System.out.println("Inserisci la tipologia della partita: ");
                               String tipologia=br.readLine();
                               
-                              if(!tifoticket.inserimentoNuovaPartita(codice, ldt, avv, tipologia)){
+                              if(!tifoticket.inserimentoNuovaPartita(codice,ldt, avv,tipologia)){
                                    System.out.println("Inserimento partita annullato.");
                                    break;
                               }                                  
@@ -78,15 +81,15 @@ public class Main {
                               System.out.println("Inserisci il nome della squadra avversaria ");
                               String avversario=br.readLine();
                               Map<String,Partita> pa= tifoticket.cercaPartita(avversario);
-                              System.out.println("\nElenco partite trovate:");
+                              System.out.println("\nElenco partite trovate: ");
                               for(Map.Entry<String,Partita>entry : pa.entrySet())
-                                   System.out.println("Codice partita:"+entry.getKey()+", Partita: "+entry.getValue()+"\n");
+                                   System.out.println("Codice partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
                               if(pa.isEmpty()){
-                                   System.err.println("Nessuna partita trovata.\n");
+                                   System.err.println("Nessuna partita trovata. Riprova.\n");
                                    break;
                               }
                               else{
-                                   System.out.println("Scegli la partita tramite il codice: ");
+                                   System.out.println("Scegli la partita inserendo il codice: ");
                                    codice=br.readLine();
                                    tifoticket.setPartitaScelta(pa.get(codice));
                                    if(pa.get(codice)==null){
@@ -190,10 +193,31 @@ public class Main {
                               break;
                     
                          case 4:
-                              System.out.println("Recupero informazioni sulle vendite in corso...");
-                              tifoticket.getDatiVendite();
+                              System.out.println("Partite attualmente disponibili: ");
+                              if(tifoticket.getListaPartite().isEmpty()){
+                                   System.out.println("ERRORE: Nessuna partita presente in memoria");
+                                   break;
+                              }
+                              else{
+                              for(Map.Entry<String,Partita> entry : tifoticket.getListaPartite().entrySet())
+                                   System.out.println("Codice Partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
+                              }
+                              System.out.println("Scegli la partita inserendo il codice: ");
+                              codice=br.readLine();
+                              if(tifoticket.getListaPartite().containsKey(codice)){
+                                   System.out.println("\nRecupero informazioni sulle vendite in corso...");
+                                   tifoticket.getVenditePartita(codice);
+                              }
+                              else{
+                                   System.out.println("ERRORE: Il codice inserito è errato.");
+                                   break;
+                              }
                               break;
                          case 5:
+                              System.out.println("Recupero informazioni sulle vendite in corso...");
+                              tifoticket.getDatiVenditeTotali();
+                              break;
+                         case 6:
                               System.out.println("Ciao ciao");
                               break;
                     }
@@ -203,6 +227,6 @@ public class Main {
                catch(DateTimeParseException dtpe){
                     System.err.println("Formato data/ora incorretto. Formati corretti:(AAAA-MM-GG) / (HH:mm)");
               }
-         }while(scelta!=5);    
+         }while(scelta!=6);    
      }
 }

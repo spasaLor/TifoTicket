@@ -19,11 +19,11 @@ public class Biglietto extends Tessera{
      @Override
      public String toString() {
           if(super.getPosto() == null)
-               return "Stampa biglietto in corso...\n" + "Codice biglietto:" + super.getCodice() + "\nNominativo: " + super.getNominativo() +
+               return "Stampa biglietto in corso...\n" + "Codice biglietto: " + super.getCodice() + "\nNominativo: " + super.getNominativo() +
                       ", età: " + super.getEta() +"\nValido per la partita: "+super.getPartita()+ "\n"+ "Prezzo: € " + super.getPrezzo() + "\n"
                   + "Settore: " + super.getSettore().getNome() + ", Posto:  ";
           else
-             return "Stampa biglietto in corso...\n" + "Codice biglietto:" + super.getCodice() + "\nNominativo: " + super.getNominativo() +
+             return "Stampa biglietto in corso...\n" + "Codice biglietto: " + super.getCodice() + "\nNominativo: " + super.getNominativo() +
                       ", età: " + super.getEta() +"\nValido per la partita: "+super.getPartita()+ "\n"+ "Prezzo: € " + super.getPrezzo() + "\n"
                   + "Settore: " + super.getSettore().getNome() + ", Posto: "+super.getPosto();
      }

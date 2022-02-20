@@ -129,7 +129,7 @@ public class TifoTicket {
           
      }
      
-     public void getDatiVendite(){
+     public void getDatiVenditeTotali(){
           int counterTot=0;
           float incassoTot=0;
           for(Map.Entry<String,Partita> entry : listaPartite.entrySet()){
@@ -149,6 +149,18 @@ public class TifoTicket {
           }
           System.out.println("Totale biglietti venduti: "+counterTot+", Incasso totale: € "+incassoTot);
      }
+     
+     public void getVenditePartita(String codicePartita){
+          Partita pa=listaPartite.get(codicePartita);
+          for(Map.Entry<String,Settore> entry : pa.getStadio().getListaSettori().entrySet()){
+               double incasso=0.00;
+               for(Biglietto bi: entry.getValue().getListaBiglietti())
+                    incasso+=bi.getPrezzo();
+               System.out.println("Biglietti venduti in "+entry.getValue().getNome()+": "
+                       +entry.getValue().getListaBiglietti().size()+"/"+entry.getValue().getCapienza()+", Incasso del settore: € "+incasso);
+          }
+     }
+     
      
      public Abbonamento confermaAbbonamento(){
           return stadio.confermaAbbonamento();

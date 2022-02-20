@@ -37,13 +37,20 @@ import org.junit.jupiter.api.Test;
           LocalDateTime ldt= LocalDateTime.of(ld,lt);
           String avversario= "inter";
           String tipo="Campionato";
-          
           tifoticket.inserimentoNuovaPartita(codice, ldt, avversario, tipo);
-          assertNotNull(tifoticket.getPartitaCorrente());
+          assertNotNull(tifoticket.getPartitaCorrente());   
           
           try{
                 // IL FORMATO DELLA DATA E' ERRATO
                ld=LocalDate.parse("10-10-2022");
+               ldt=LocalDateTime.of(ld,lt);
+          }
+          catch(DateTimeParseException dtpe){
+               System.err.println("Expected error: "+dtpe.getMessage());
+          }
+          try{
+                // IL FORMATO DELL'ORA E' ERRATO
+               lt=LocalTime.parse("20.30");
                ldt=LocalDateTime.of(ld,lt);
           }
           catch(DateTimeParseException dtpe){
@@ -74,7 +81,7 @@ import org.junit.jupiter.api.Test;
                tifoticket.inserimentoNuovaPartita(codice, ldt, avversario, tipo);
                tifoticket.confermaInserimento();
 
-               assertEquals(2,tifoticket.getListaPartite().size());
+               assertEquals(3,tifoticket.getListaPartite().size());
          }
          catch(Exception e){
               System.err.println("unexpected error: "+e.getMessage());
@@ -128,7 +135,7 @@ import org.junit.jupiter.api.Test;
           catch(Exception e){
                System.err.println("Expected error: "+e.getMessage());
           }
-          try{
+          try{//RICERCA CORRETTA
                String codice="cba";
                LocalDate ld=LocalDate.parse("2022-02-04");
                LocalTime lt=LocalTime.parse("20:45");
@@ -147,7 +154,7 @@ import org.junit.jupiter.api.Test;
           }
      }
      
-     @Test 
+     @Test
       void testSceltaPosto(){
           try {//CERCO UN POSTO CHE NON ESISTE
                tifoticket.sceltaSettore("Tribuna Est");
@@ -162,6 +169,32 @@ import org.junit.jupiter.api.Test;
           } catch (Exception ex) {
                System.err.println("Unexpected error: ");
           }
-          
      }
+      @Test 
+      void testGetVenditePartita(){
+           //CERCO I DATI PER UNA PARTITA CHE NON ESISTE
+           try{
+                tifoticket.getVenditePartita("codice");
+           }
+           catch(NullPointerException npe){
+                System.err.println("Expected error: nullpointer "+npe.getLocalizedMessage());
+           }
+           //CERCO I DATI PER UNA PARTITA INSERITA
+           try{
+               String codice="jkl";
+               LocalDate ld=LocalDate.parse("2022-07-07");
+               LocalTime lt=LocalTime.parse("20:45");
+               LocalDateTime ldt= LocalDateTime.of(ld,lt);
+               String avversario= "Parma";
+               String tipo="Campionato";
+
+               tifoticket.inserimentoNuovaPartita(codice, ldt, avversario, tipo);
+               tifoticket.confermaInserimento();
+               tifoticket.getVenditePartita("jkl");
+               assertNotNull(tifoticket.getListaPartite().get("jkl"));
+           }
+           catch(Exception e){
+                System.err.println("Unexpected error: "+e.getMessage());
+           }
+      }
 }
