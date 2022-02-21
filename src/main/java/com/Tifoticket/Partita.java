@@ -81,6 +81,28 @@ public class Partita {
          return prezzoFinale;
     }
     
+    public Biglietto sostituzioneNominativo(String codiceBiglietto,String nuovoNom,int nuovaEta){
+         if(!this.listaBiglietti.isEmpty()){
+          for(Biglietto bi : this.listaBiglietti){
+               if(bi.getCodice().equals(codiceBiglietto)){
+                    if(bi.getEta()<14 && nuovaEta<14 || bi.getEta()>65 && nuovaEta>65 || bi.getEta()>14 && bi.getEta()<65 && nuovaEta>14 && nuovaEta<65){
+                          bi.setNominativo(nuovoNom);
+                          bi.setEta(nuovaEta);
+                          bi.setSovrapprezzo(5);
+                          return bi;
+                    }
+                    else
+                         System.err.println("ERRORE: Impossibile eseguire la sostituzione per 2 tariffe diverse.");
+               }
+               else
+                    System.err.println("ERRORE: Codice biglietto non valido.");
+          }
+         }
+         else
+              System.err.println("ERRORE: Non sono ancora stati venduti biglietti per questa partita.");
+         return null;
+    }
+    
     public String getCodice() {
         return codice;
     }
@@ -140,7 +162,8 @@ public class Partita {
     @Override
     public String toString() {
         return "Furci vs " + avversario +", partita di: " + tipologia 
-                +" del "+ data.getDayOfMonth()+"/"+data.getMonthValue()+"/"+data.getYear()+" Orario: "+data.getHour()+":"+data.getMinute();
+                +" del "+ data.getDayOfMonth()+"/"+data.getMonthValue()+"/"+data.getYear()+" Orario: "+data.getHour()+":"+data.getMinute()+
+                ". Codice Partita: "+codice;
     }
     
     public boolean equalsAvversario(String avv){

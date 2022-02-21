@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,4 +88,30 @@ import org.junit.jupiter.api.Test;
                System.err.println("Unexpected error: "+ex.getMessage());
           }          
      }
+      
+      @Test
+      void testSostituzioneNominativo(){
+           //NON HO INSERITO NESSUN BIGLIETTO QUINDI NON POSSO EFFETTUARE LA SOSTITUZIONE
+           try{
+                assertNull(pa.sostituzioneNominativo("aaa", "Marco Spadaro", 50));
+           }
+           catch(Exception e ){
+                System.out.println("Unexpected error: "+e.getMessage());
+           }
+           try{//FLUSSO CORRETTO
+                pa.sceltaSettore("Curva Sud");
+                pa.datiCliente("Lorenzo spadaro", 70);
+                pa.confermaAcquisto();
+                assertNotNull(pa.sostituzioneNominativo(pa.getListaBiglietti().get(0).getCodice(), "Marco Spadaro", 71));
+                
+           }catch (Exception ex) {
+               System.out.println("Unexpected error: "+ex.getMessage()); 
+           }
+          
+           try {//STO PROVANDO A FARE UNA SOSTITUZIONE NOMINATIVO MA CON 2 TARIFFE DIVERSE
+             assertNull(pa.sostituzioneNominativo(pa.getListaBiglietti().get(0).getCodice(), "Marco Spadaro", 10));
+          } catch (Exception ex) {
+               System.err.println("Unexpected error: "+ex.getMessage());
+          }
+      }
 }

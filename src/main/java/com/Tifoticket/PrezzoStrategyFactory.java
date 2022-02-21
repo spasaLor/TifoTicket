@@ -17,8 +17,6 @@ public class PrezzoStrategyFactory {
      public static PrezzoStrategyFactory getInstance(){
         if(factory == null)
             factory = new PrezzoStrategyFactory();       
-        else
-            System.out.println("Istanza già creata");
         return factory;
     }
      

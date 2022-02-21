@@ -38,15 +38,26 @@ public class Tribuna extends Settore{
     @Override
     public void calcolaPrezzoAbb(Settore se){
          Tessera t= se.getAbbonamentoCorrente();
-         
          float prezzo=0;
-         if(t.getEta()<18)
-              prezzo=250;
-         else if(t.getEta()>18 && t.getEta()<65)
-              prezzo= 450;
-         else if(t.getEta()>65)
-              prezzo=300;
-         t.setPrezzo(prezzo);
+         
+         if(t.getSettore().getNome().equals("Tribuna Est")){
+               if(t.getEta()<14)
+                    prezzo=200;
+               else if(t.getEta()>=14 && t.getEta()<65)
+                    prezzo= 270;
+               else if(t.getEta()>65)
+                    prezzo=230;
+               t.setPrezzo(prezzo);
+         }
+         else{
+              if(t.getEta()<14)
+                    prezzo=220;
+               else if(t.getEta()>=14 && t.getEta()<65)
+                    prezzo= 320;
+               else if(t.getEta()>65)
+                    prezzo=270;
+               t.setPrezzo(prezzo);
+         }
     }
     
     public Posto scegliPostoAbbonamento(int fila,int numero) throws Exception{

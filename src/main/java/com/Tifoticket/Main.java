@@ -26,10 +26,11 @@ public class Main {
           System.out.println("\n*** MENU ***");
           System.out.println("1. Inserimento nuova Partita");
           System.out.println("2. Vendita Biglietto");
-          System.out.println("3. Vendita Abbonamento");
-          System.out.println("4. Visualizza informazioni vendite per una specifica partita");
-          System.out.println("5. Visualizza informazioni vendite biglietti complessive");
-          System.out.println("6. USCITA");
+          System.out.println("3. Sostituzione nominativo su Biglietto");
+          System.out.println("4. Vendita Abbonamento");
+          System.out.println("5. Visualizza informazioni vendite per una specifica partita");
+          System.out.println("6. Visualizza informazioni vendite biglietti complessive");
+          System.out.println("7. USCITA");
           System.out.println("Scelta-> ");
      }
      
@@ -44,7 +45,7 @@ public class Main {
                     scelta = Integer.parseInt(br.readLine());
                     switch(scelta){
                          case 1:
-                              System.out.println("Inserisci il codice della partita: ");
+                              System.out.println("\nInserisci il codice della partita: ");
                               String codice=br.readLine();
                               System.out.println("\nInserisci la data della partita: ");
                               String data=br.readLine();
@@ -78,14 +79,14 @@ public class Main {
                               }
                               break;
                          case 2:
-                              System.out.println("Inserisci il nome della squadra avversaria ");
+                              System.out.println("\nInserisci il nome della squadra avversaria: ");
                               String avversario=br.readLine();
                               Map<String,Partita> pa= tifoticket.cercaPartita(avversario);
                               System.out.println("\nElenco partite trovate: ");
                               for(Map.Entry<String,Partita>entry : pa.entrySet())
                                    System.out.println("Codice partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
                               if(pa.isEmpty()){
-                                   System.err.println("Nessuna partita trovata. Riprova.\n");
+                                   System.err.println("Nessuna partita trovata. Riprova.");
                                    break;
                               }
                               else{
@@ -97,7 +98,7 @@ public class Main {
                                         break;
                                    }
                                    System.out.println("\nPartita selezionata: "+pa.get(codice));
-                                   System.out.println("\nInserisci il settore per cui vuoi comprare un biglietto: ");
+                                   System.out.println("\nInserisci il settore per cui vuoi vendere un biglietto: ");
                                    String settore=br.readLine();
                               {
                                    try {
@@ -137,11 +138,39 @@ public class Main {
                                    if(br.readLine().length()==0)
                                         tifoticket.confermaAcquisto();
                                    else
-                                        System.out.println("Acquisto Biglietto annullato.");
+                                        System.out.println("Vendita Biglietto annullata.");
                                    break;
                               }
-                         case 3:
-                              System.out.println("\nInserisci il settore per cui vuoi sottoscrivere un abbonamento annuale: ");
+                         case 3: 
+                              System.out.println("\nInserisci il codice del biglietto: ");
+                              String codiceB=br.readLine();
+                              System.out.println("\nInserisci il codice della partita: ");
+                              String codicePar=br.readLine();
+                              if(tifoticket.getListaPartite().containsKey(codicePar))
+                                   System.out.println("\nPartita trovata");
+                              else{
+                                   System.out.println("\nIl codice inserito non corrisponde a nessuna partita.");
+                                   break;
+                              }
+                              System.out.println("\nInserisci il nuovo nominativo da inserire sul biglietto: ");
+                              String nuovoNom=br.readLine();
+                              System.out.println("\nInserisci l'età da sostituire sul biglietto: ");
+                              int nuovaEta= Integer.parseInt(br.readLine());
+                              System.out.println("\nInvio per confermare l'inserimento dei dati.");
+                              if(br.readLine().length()==0){
+                                   Biglietto tmp=tifoticket.sostituzioneNominativo(codiceB, codicePar, nuovoNom, nuovaEta);
+                                   if(tmp == null)
+                                        break;
+                                   else
+                                        System.out.println(tmp);
+                              }
+                              else{
+                                   System.out.println("Sostituzione nominativo Biglietto annullata.");
+                                   break;
+                              }
+                              break;
+                         case 4:
+                              System.out.println("\nInserisci il settore per cui vuoi vendere un abbonamento annuale: ");
                               String settore=br.readLine();
                          {
                               try {
@@ -187,21 +216,22 @@ public class Main {
                               if(br.readLine().length()==0)
                                    System.out.println(tifoticket.confermaAbbonamento());
                               else{
-                                   System.out.println("Acquisto Abbonamento annullato.");
+                                   System.out.println("Vendita Abbonamento annullata.");
                                    break;
                               }
                               break;
                     
-                         case 4:
-                              System.out.println("Partite attualmente disponibili: ");
+                         case 5:
+                              System.out.println("\nPartite attualmente disponibili: ");
                               if(tifoticket.getListaPartite().isEmpty()){
                                    System.out.println("ERRORE: Nessuna partita presente in memoria");
                                    break;
                               }
                               else{
-                              for(Map.Entry<String,Partita> entry : tifoticket.getListaPartite().entrySet())
-                                   System.out.println("Codice Partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
+                                   for(Map.Entry<String,Partita> entry : tifoticket.getListaPartite().entrySet())
+                                        System.out.println("Codice Partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
                               }
+                              
                               System.out.println("Scegli la partita inserendo il codice: ");
                               codice=br.readLine();
                               if(tifoticket.getListaPartite().containsKey(codice)){
@@ -213,11 +243,11 @@ public class Main {
                                    break;
                               }
                               break;
-                         case 5:
-                              System.out.println("Recupero informazioni sulle vendite in corso...");
+                         case 6:
+                              System.out.println("\nRecupero informazioni sulle vendite in corso...");
                               tifoticket.getDatiVenditeTotali();
                               break;
-                         case 6:
+                         case 7:
                               System.out.println("Ciao ciao");
                               break;
                     }
@@ -227,6 +257,9 @@ public class Main {
                catch(DateTimeParseException dtpe){
                     System.err.println("Formato data/ora incorretto. Formati corretti:(AAAA-MM-GG) / (HH:mm)");
               }
-         }while(scelta!=6);    
+               catch(NumberFormatException nfe){
+                    System.err.println("ERRORE: E' richiesto l'inserimento di un numero");
+              }
+         }while(scelta!=7);    
      }
 }

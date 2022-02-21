@@ -128,6 +128,10 @@ public class TifoTicket {
                System.out.println("Posto scelto correttamente");
           
      }
+
+     public Abbonamento confermaAbbonamento(){
+          return stadio.confermaAbbonamento();
+     }
      
      public void getDatiVenditeTotali(){
           int counterTot=0;
@@ -161,11 +165,12 @@ public class TifoTicket {
           }
      }
      
-     
-     public Abbonamento confermaAbbonamento(){
-          return stadio.confermaAbbonamento();
+     public Biglietto sostituzioneNominativo(String codiceBiglietto,String codicePartita,String nuovoNom,int nuovaEta){
+          Partita pa= listaPartite.get(codicePartita);
+          Biglietto bi= pa.sostituzioneNominativo(codiceBiglietto,nuovoNom,nuovaEta);
+          return bi; 
      }
-
+     
     public Partita getPartitaCorrente() {
         return partitaCorrente;
     }
