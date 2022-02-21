@@ -5,10 +5,17 @@
  */
 package com.Tifoticket;
 
+import com.Tifoticket.domain.Stadio;
+import com.Tifoticket.domain.Partita;
+import exceptions.PostoException;
+import exceptions.SettoreException;
+import exceptions.datiClienteException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -40,6 +47,21 @@ import org.junit.jupiter.api.Test;
           assertNotNull(st.getListaSettori().get("Curva Nord"));
      }
      
+      @Test
+      void testSceltaSettore(){
+          try {     //CURVA EST NON ESISTE
+               st.sceltaSettore("Curva Est");
+               fail();
+          } catch (SettoreException ex) {
+               System.out.println("Expected error: "+ex.getMessage());
+          }
+          try {
+               assertNotNull(st.sceltaSettore("Tribuna Est"));
+          } catch (SettoreException ex) {
+               System.out.println("Unexpected error: "+ex.getMessage());
+          }
+      }
+      
      @Test
       void testListaPartite(){
           LocalDate ld= LocalDate.parse("2022-05-06");
@@ -76,7 +98,7 @@ import org.junit.jupiter.api.Test;
           }    
           catch(NullPointerException ex){
                System.out.println("Expected error nullPointer: "+ex.getMessage());
-          } catch (Exception ex) {
+          } catch (SettoreException ex) {
                System.err.println("Expected error:  "+ex.getMessage());
           }
      }
@@ -85,21 +107,23 @@ import org.junit.jupiter.api.Test;
           try {
                st.sceltaSettore("Curva Sud");
           } catch (Exception ex) {
-               System.out.println("UNExpected error: "+ex.getMessage());
+               System.out.println("Unexpected error: "+ex.getMessage());
           }
           try {//INSERIMENTO CORRETTO
                st.datiClienteAbb("Lorenzo spadaro","abababababababab", 20);
                assertNotNull(st.getSettoreScelto().getAbbonamentoCorrente());
                st.confermaAbbonamento();
           } catch (Exception ex) {
-               System.out.println("UNExpected error: "+ex.getMessage());
+               System.out.println("Unexpected error: "+ex.getMessage());
           }
           try {// FALLISCE PERCHE' STO INSERENDO UN CF UGUALE AD UNO GIA' PRESENTE
                st.sceltaSettore("Curva Sud");
                st.datiClienteAbb("Lorenzo spadaro","abababababababab", 30);
                fail();
-          } catch (Exception ex) {
+          } catch (datiClienteException ex) {
                System.out.println("Expected error: "+ex.getMessage());
+          } catch (SettoreException ex) {
+               System.out.println("Unexpected error: "+ex.getMessage());
           }
      }
      
@@ -110,14 +134,16 @@ import org.junit.jupiter.api.Test;
                st.datiClienteAbb("Lorenzo spadaro","abababababababab", 30);
                assertNotNull(st.postoAbbonamento(1, 8));
           } catch (Exception ex) {
-               System.out.println("Unexpected error:PA "+ex.getMessage());
+               System.out.println("Unexpected error: "+ex.getMessage());
           }
           try {//FALLSICE PERCHE' SCELGO UN POSTO CHE NON ESISTE
                st.sceltaSettore("Tribuna Est");
                st.postoAbbonamento(2, 10);
                fail();
-          } catch (Exception ex) {
+          } catch (PostoException ex) {
                System.out.println("Expected error: "+ex.getMessage());
+          } catch (SettoreException ex) {
+               System.out.println("Unexpected error: "+ex.getMessage());
           }
           
      }

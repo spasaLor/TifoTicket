@@ -5,10 +5,15 @@
  */
 package com.Tifoticket;
 
+import com.Tifoticket.domain.Settore;
+import com.Tifoticket.domain.Tribuna;
+import exceptions.PostoException;
+import exceptions.datiClienteException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -17,10 +22,14 @@ import org.junit.jupiter.api.Test;
  */
  class TestSettore {
       Settore se;
-     
+      
+      @BeforeEach
+      void init(){
+           se= new Tribuna("Tribuna Est",10);
+      }
+      
       @Test
       void testDatiClienteAbb(){
-           se= new Tribuna("Tribuna Est",10);
            try {
                 se.datiClienteAbb("Lorenzo Spadaro","abababababababab", 30);
                 se.postoAbbonamento(1, 10);
@@ -42,26 +51,27 @@ import org.junit.jupiter.api.Test;
            try {//STO INSERENDO UN CODICE FISCALE GIA' PRESENTE
                 se.datiClienteAbb("Lorenzo Spadaro","abababababababab", 30);
                 fail();
-           } catch (Exception ex) {
+           } catch (datiClienteException ex) {
                 System.err.println("Expected error: "+ex.getMessage());
            }
            try {//STO INSERENDO UN CODICE FISCALE ERRATO
                 se.datiClienteAbb("Lorenzo Spadaro","bbdajf", 30);
                 fail();
-           } catch (Exception ex) {
+           } catch (datiClienteException ex) {
                 System.err.println("Expected error: "+ex.getMessage());
            }
       }
       
       @Test
       void testPostoAbbonamento(){
-           se=new Tribuna("Tribuna Est",10);
            try { //SCELGO UN POSTO CHE NON ESISTE
                 se.datiClienteAbb("Lorenzo Spadaro","babababababababa", 30);
                 assertNull(se.postoAbbonamento(2, 8));
                 fail();
-           } catch (Exception ex) {
+           } catch (PostoException ex) {
                 System.err.println("Expected error: "+ex.getMessage());
+           } catch (Exception ex) {
+                System.err.println("Unexpected error: "+ex.getMessage());
            }
            try { //FLUSSO CORRETTO
                 se.datiClienteAbb("Lorenzo Spadaro","babababababababa", 30);

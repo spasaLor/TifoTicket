@@ -1,4 +1,4 @@
-package com.Tifoticket;
+package com.Tifoticket.domain;
 
 public class Posto {
     private int fila;

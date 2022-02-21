@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.Tifoticket;
+package com.Tifoticket.domain;
 
+import exceptions.NominativoException;
+import exceptions.PartitaException;
+import exceptions.PostoException;
+import exceptions.SettoreException;
+import exceptions.datiClienteException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -81,64 +86,60 @@ public class Main {
                               System.out.println("\nInserisci il nome della squadra avversaria: ");
                               String avversario=br.readLine();
                               Map<String,Partita> pa= tifoticket.cercaPartita(avversario);
-                              System.out.println("\nElenco partite trovate: ");
-                              for(Map.Entry<String,Partita>entry : pa.entrySet())
-                                   System.out.println("Codice partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
                               if(pa.isEmpty()){
                                    System.err.println("Nessuna partita trovata. Riprova.");
                                    break;
                               }
                               else{
-                                   System.out.println("Scegli la partita inserendo il codice: ");
-                                   codice=br.readLine();
-                                   tifoticket.setPartitaScelta(pa.get(codice));
-                                   if(pa.get(codice)==null){
-                                        System.out.println("Il codice inserito non appartiene a nessuna partita. Riprova");
-                                        break;
-                                   }
-                                   System.out.println("\nPartita selezionata: "+pa.get(codice));
-                                   System.out.println("\nInserisci il settore per cui vuoi vendere un biglietto: ");
-                                   String settore=br.readLine();
-                              {
-                                   try {
-                                        tifoticket.sceltaSettore(settore);
-                                   }
-                                   catch(ConcurrentModificationException cme){
-                                        System.out.println(tifoticket.getPartitaScelta().getStadio().elencoPostiDisponibili(settore).toString());
-                                   }
-                                   catch (Exception ex) {
-                                        System.out.println(ex.getMessage());
-                                        break;
-                                   }
-                                   
-                              }
-                                   if(settore.contains("Tribuna")){
-                                        System.out.println("\nInserisci la fila: ");
-                                        int fila=Integer.parseInt(br.readLine());
-                                        System.out.println("Inserisci il numero del posto scelto: ");
-                                        int numero=Integer.parseInt(br.readLine());
-                                        String res;
-                                        try {
-                                             res = tifoticket.sceltaPosto(fila, numero);
-                                             if(res!=null)
-                                                  System.out.println(res);
-                                        } catch (Exception ex) {
-                                             System.err.println(ex.getMessage());
-                                             break;
-                                        }
-                                   }           
-
-                                   System.out.println("\nInserisci nome e cognome del cliente: ");
-                                   String nominativo=br.readLine();
-                                   System.out.println("Inserisci l'età del cliente: ");
-                                   int eta=Integer.parseInt(br.readLine());
-                                   tifoticket.datiCliente(nominativo, eta);
-                                   System.out.println("\nInvio per confermare l'inserimento dei dati.");
-                                   if(br.readLine().length()==0)
-                                        tifoticket.confermaAcquisto();
-                                   else
-                                        System.out.println("Vendita Biglietto annullata.");
+                              System.out.println("\nElenco partite trovate: ");
+                              for(Map.Entry<String,Partita>entry : pa.entrySet())
+                                   System.out.println("Codice partita: "+entry.getKey()+", Partita: "+entry.getValue()+"\n");
+                              System.out.println("Scegli la partita inserendo il codice: ");
+                              codice=br.readLine();
+                              tifoticket.setPartitaScelta(pa.get(codice));
+                              if(pa.get(codice)==null){
+                                   System.out.println("Il codice inserito non appartiene a nessuna partita. Riprova");
                                    break;
+                              }
+                              System.out.println("\nPartita selezionata: "+pa.get(codice));
+                              System.out.println("\nInserisci il settore per cui vuoi vendere un biglietto: ");
+                              String settore=br.readLine();
+                              try {
+                                   tifoticket.sceltaSettore(settore);
+                              }
+                              catch(ConcurrentModificationException cme){
+                                   System.out.println(tifoticket.getPartitaScelta().getStadio().elencoPostiDisponibili(settore).toString());
+                              } catch (SettoreException ex) {   
+                                   System.err.println("ERRORE: "+ex.getMessage());
+                                   break;
+                              }
+                              if(settore.contains("Tribuna")){
+                                   System.out.println("\nInserisci la fila: ");
+                                   int fila=Integer.parseInt(br.readLine());
+                                   System.out.println("Inserisci il numero del posto scelto: ");
+                                   int numero=Integer.parseInt(br.readLine());
+                                   String res;
+                                   try {
+                                        res = tifoticket.sceltaPosto(fila, numero);
+                                        if(res!=null)
+                                             System.out.println(res);
+                                   } catch (PostoException ex) {
+                                        System.err.println("ERRORE: "+ex.getMessage());
+                                        break;
+                                   }
+                              }           
+
+                              System.out.println("\nInserisci nome e cognome del cliente: ");
+                              String nominativo=br.readLine();
+                              System.out.println("Inserisci l'età del cliente: ");
+                              int eta=Integer.parseInt(br.readLine());
+                              tifoticket.datiCliente(nominativo, eta);
+                              System.out.println("\nInvio per confermare l'inserimento dei dati.");
+                              if(br.readLine().length()==0)
+                                   tifoticket.confermaAcquisto();
+                              else
+                                   System.out.println("Vendita Biglietto annullata.");
+                              break;
                               }
                          case 3: 
                               System.out.println("\nInserisci il codice del biglietto: ");
@@ -180,7 +181,7 @@ public class Main {
                                    }
                                    else
                                         System.out.println("Ci sono ancora "+posti_liberi+" posti liberi in "+settore);
-                              } catch (Exception ex) {
+                              } catch (SettoreException ex) {
                                    System.err.println(ex.getMessage());
                                    break;
                               }
@@ -194,8 +195,8 @@ public class Main {
                          {
                               try {
                                    tifoticket.datiClienteAbb(nominativo,CF,eta);
-                              } catch (Exception ex) {
-                                   System.err.println(ex.getMessage());
+                              } catch (datiClienteException ex) {
+                                   System.err.println("ERRORE: "+ex.getMessage());
                                    break;
                               }
                          }
@@ -206,8 +207,8 @@ public class Main {
                                    int numero=Integer.parseInt(br.readLine());
                                    try {
                                         tifoticket.postoAbbonamento(fila, numero);
-                                   } catch (Exception ex) {
-                                       System.err.println(ex.getMessage());
+                                   } catch (PostoException ex) {
+                                       System.err.println("ERRORE: "+ex.getMessage());
                                        break;
                                    }
                               }
@@ -261,7 +262,11 @@ public class Main {
               }
                catch(NumberFormatException nfe){
                     System.err.println("ERRORE: E' richiesto l'inserimento di un numero");
-              }
+              } catch (PartitaException ex) {
+                    System.err.println("ERRORE: "+ex.getMessage());
+               } catch (NominativoException ex) {
+                    System.err.println("ERRORE: "+ex.getMessage());
+               }
          }while(scelta!=7);    
      }
 }

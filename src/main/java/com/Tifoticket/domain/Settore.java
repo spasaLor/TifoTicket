@@ -1,5 +1,7 @@
-package com.Tifoticket;
+package com.Tifoticket.domain;
 
+import exceptions.PostoException;
+import exceptions.datiClienteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,13 +23,13 @@ public abstract class Settore {
     
     public abstract void calcolaPrezzoAbb(Settore se);
 
-     public void datiClienteAbb(String nominativo,String CF,int eta) throws Exception{
+     public void datiClienteAbb(String nominativo,String CF,int eta) throws datiClienteException{
           for(Abbonamento a: listaAbbonamenti){
               if(a.getCF().equals(CF))
-                   throw new Exception("ERRORE: A questo codice fiscale è già associato un abbonamento valido.");
+                   throw new datiClienteException("A questo codice fiscale è già associato un abbonamento valido.");
          }
          if(CF.length()!=16)
-              throw new Exception ("ERRORE: Lunghezza codice fiscale errata.");
+              throw new datiClienteException ("Lunghezza codice fiscale errata.");
          String codice=UUID.randomUUID().toString().substring(0,5);         
          abbonamentoCorrente=new Abbonamento(nominativo,codice,this,CF);
          
@@ -35,7 +37,7 @@ public abstract class Settore {
          this.calcolaPrezzoAbb(this);
     }
     
-    public Posto postoAbbonamento(int fila,int numero) throws Exception{
+    public Posto postoAbbonamento(int fila,int numero) throws PostoException{
           Tribuna tr=(Tribuna)this;
           Posto po=tr.scegliPostoAbbonamento(fila,numero);
           abbonamentoCorrente.setPosto(po);

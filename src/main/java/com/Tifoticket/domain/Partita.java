@@ -1,5 +1,8 @@
-package com.Tifoticket;
+package com.Tifoticket.domain;
 
+import exceptions.NominativoException;
+import exceptions.PostoException;
+import exceptions.SettoreException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ public class Partita {
         return res;
     }
     
-    public int sceltaSettore(String nomeSettore) throws Exception{
+    public int sceltaSettore(String nomeSettore) throws SettoreException{
           int posti_liberi=0;
           Settore se=stadio.sceltaSettore(nomeSettore);
           posti_liberi=se.getCapienza()-se.getListaBiglietti().size()-se.getListaAbbonamenti().size();
@@ -43,7 +46,7 @@ public class Partita {
           return posti_liberi;     
     }
 
-    public String sceltaPosto(int fila,int numero) throws Exception{
+    public String sceltaPosto(int fila,int numero) throws PostoException{
           Posto po=null;
           String res=null;
           po=stadio.sceltaPosto(fila,numero);
@@ -81,7 +84,7 @@ public class Partita {
          return prezzoFinale;
     }
     
-    public Biglietto sostituzioneNominativo(String codiceBiglietto,String nuovoNom,int nuovaEta){
+    public Biglietto sostituzioneNominativo(String codiceBiglietto,String nuovoNom,int nuovaEta) throws NominativoException{
          if(!this.listaBiglietti.isEmpty()){
           for(Biglietto bi : this.listaBiglietti){
                if(bi.getCodice().equals(codiceBiglietto)){
@@ -92,14 +95,14 @@ public class Partita {
                           return bi;
                     }
                     else
-                         System.err.println("ERRORE: Impossibile eseguire la sostituzione per 2 tariffe diverse.");
+                         throw new NominativoException("Impossibile eseguire la sostituzione per 2 tariffe diverse.");
                }
                else
-                    System.err.println("ERRORE: Codice biglietto non valido.");
+                    throw new NominativoException("Codice biglietto non valido.");
           }
          }
          else
-              System.err.println("ERRORE: Non sono ancora stati venduti biglietti per questa partita.");
+              throw new NominativoException("Non sono ancora stati venduti biglietti per questa partita.");
          return null;
     }
     

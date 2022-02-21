@@ -5,6 +5,8 @@
  */
 package com.Tifoticket;
 
+import com.Tifoticket.domain.Tribuna;
+import exceptions.PostoException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -35,7 +37,7 @@ import org.junit.jupiter.api.Test;
                se.sceltaPosto(1,11);
                fail();
           }
-          catch(Exception e){
+          catch(PostoException e){
                System.err.println("Expected error: "+e.getMessage());
           }
      }

@@ -5,10 +5,16 @@
  */
 package com.Tifoticket;
 
+import com.Tifoticket.domain.TifoTicket;
+import exceptions.PartitaException;
+import exceptions.PostoException;
+import exceptions.SettoreException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,7 +43,11 @@ import org.junit.jupiter.api.Test;
           LocalDateTime ldt= LocalDateTime.of(ld,lt);
           String avversario= "inter";
           String tipo="Campionato";
-          tifoticket.inserimentoNuovaPartita(codice, ldt, avversario, tipo);
+          try {
+               tifoticket.inserimentoNuovaPartita(codice, ldt, avversario, tipo);
+          } catch (PartitaException ex) {
+               System.out.println("unexpected error: "+ex.getMessage());
+          }
           assertNotNull(tifoticket.getPartitaCorrente());   
           
           try{
@@ -60,11 +70,12 @@ import org.junit.jupiter.api.Test;
                //INSERIMENTO DI DUE PARTITE IN SOVRAPPOSIZIONE
                tifoticket.inserimentoNuovaPartita("ppp", ldt, avversario, tipo);
                tifoticket.confermaInserimento();
-               assertFalse(tifoticket.inserimentoNuovaPartita("www", ldt, avversario, tipo));
+               tifoticket.inserimentoNuovaPartita("www", ldt, avversario, tipo);
+               fail();
                //L'ultimo inserimento non avviene
           }
-          catch(Exception e){
-               System.err.println("unexpected error: "+e.getMessage());
+          catch(PartitaException e){
+               System.err.println("Expected error: "+e.getMessage());
           }
      }
      
@@ -83,7 +94,7 @@ import org.junit.jupiter.api.Test;
 
                assertEquals(3,tifoticket.getListaPartite().size());
          }
-         catch(Exception e){
+         catch(PartitaException e){
               System.err.println("unexpected error: "+e.getMessage());
          }
           
@@ -111,7 +122,7 @@ import org.junit.jupiter.api.Test;
                assertNotNull(tifoticket.cercaPartita("Milan"));
                assertEquals(1,tifoticket.getListaPartite().size());
           }
-          catch(Exception e){
+          catch(PartitaException e){
                System.err.println("Unexpected error"+e.getMessage());
           }
      }
@@ -132,8 +143,10 @@ import org.junit.jupiter.api.Test;
                tifoticket.sceltaSettore("Curva Est");
                fail();
           }
-          catch(Exception e){
+          catch(SettoreException e){
                System.err.println("Expected error: "+e.getMessage());
+          } catch (PartitaException ex) {
+              System.err.println("Unexpected error: "+ex.getMessage());
           }
           try{//RICERCA CORRETTA
                String codice="cba";
@@ -160,9 +173,12 @@ import org.junit.jupiter.api.Test;
                tifoticket.sceltaSettore("Tribuna Est");
                tifoticket.sceltaPosto(2, 10);
                fail();
-          } catch (Exception ex) {
+          } catch (PostoException ex) {
                System.err.println("Expected error: "+ex.getMessage());
+          } catch (SettoreException ex) {
+               System.err.println("Unexpected error: "+ex.getMessage());
           }
+          
           try {//RICERCA CORRETTA
                tifoticket.sceltaSettore("Tribuna Est");
                tifoticket.sceltaPosto(1, 10);

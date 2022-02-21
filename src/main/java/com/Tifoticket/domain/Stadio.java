@@ -1,5 +1,8 @@
-package com.Tifoticket;
+package com.Tifoticket.domain;
 
+import exceptions.PostoException;
+import exceptions.SettoreException;
+import exceptions.datiClienteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,13 +31,13 @@ public class Stadio {
         return "Prezzo biglietti inserito";
     }
     
-    public Settore sceltaSettore(String nomeSettore) throws Exception{
+    public Settore sceltaSettore(String nomeSettore) throws SettoreException{
          if(listaSettori.containsKey(nomeSettore)){
               settoreScelto=listaSettori.get(nomeSettore);
               return settoreScelto;
          }
          else
-              throw new Exception("ERRORE. Settore non trovato.");
+              throw new SettoreException("Settore non trovato.");
     }
 
     public List<Posto> elencoPostiDisponibili(String nomeSettore){
@@ -50,16 +53,16 @@ public class Stadio {
          return listaDisponibili;
     }
     
-    public Posto sceltaPosto(int fila,int numero) throws Exception{
+    public Posto sceltaPosto(int fila,int numero) throws PostoException{
          Tribuna tr=(Tribuna)settoreScelto;
          return tr.sceltaPosto(fila,numero);
     }
     
-    public void datiClienteAbb(String nominativo,String CF,int eta) throws Exception{
+    public void datiClienteAbb(String nominativo,String CF,int eta) throws datiClienteException{
          settoreScelto.datiClienteAbb(nominativo, CF, eta);
     }
     
-   public Posto postoAbbonamento(int fila,int numero) throws Exception{
+   public Posto postoAbbonamento(int fila,int numero) throws PostoException{
         return settoreScelto.postoAbbonamento(fila, numero);
    }
    

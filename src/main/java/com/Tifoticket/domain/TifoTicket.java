@@ -1,5 +1,10 @@
-package com.Tifoticket;
+package com.Tifoticket.domain;
 
+import exceptions.NominativoException;
+import exceptions.PartitaException;
+import exceptions.PostoException;
+import exceptions.SettoreException;
+import exceptions.datiClienteException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +28,7 @@ public class TifoTicket {
         return tifoticket;
     }
 
-    public boolean inserimentoNuovaPartita(String codice,LocalDateTime data, String avversario,String tipologia){
+    public boolean inserimentoNuovaPartita(String codice,LocalDateTime data, String avversario,String tipologia) throws PartitaException{
         Partita p=listaPartite.get(codice);
         if (p==null){
              if(!controllaSovrapposizione(data)){//se non si sovrappone con altre partite
@@ -33,21 +38,16 @@ public class TifoTicket {
                        else
                             this.partitaCorrente=new Partita(codice,data,avversario,tipologia,null);
                         System.out.println("Partita inserita");
-                  }
-                  else{
-                       System.err.println("ERRORE: Errore nell'immissione della tipologia.");
-                       return false;
-                  }
-             }
-             else{
-                  System.err.println("ERRORE: Partita in sovrapposizione con un'altra.");
-                  return false;
-             }
-        }
-        else{
-            System.err.println("ERRORE: Codice partita già presente");
-            return false;
-        }
+                   }
+                  else
+                       throw new PartitaException("Errore nell'immissione della tipologia.");
+              }
+             else
+                  throw new PartitaException("Partita in sovrapposizione con un'altra.");
+         }
+        else
+            throw new PartitaException("Codice partita già presente");
+        
         return true;
     }
     
@@ -83,12 +83,12 @@ public class TifoTicket {
           return partiteTrovate;
      }
      
-     public void sceltaSettore(String nomeSettore) throws Exception{
+     public void sceltaSettore(String nomeSettore) throws SettoreException{
           int posti_liberi=0;
           posti_liberi = partitaScelta.sceltaSettore(nomeSettore);
           Stadio st=partitaScelta.getStadio();
           if (posti_liberi==0)
-               System.err.println("ERRORE: Settore pieno. Scegli un altro settore.");
+               throw new SettoreException("Settore pieno. Scegli un altro settore.");
           else{
                System.out.println("Ci sono ancora "+posti_liberi+" posti disponibili in "+nomeSettore+".");
                if(nomeSettore.contains("Tribuna"))
@@ -96,7 +96,7 @@ public class TifoTicket {
           }
      }
      
-     public String sceltaPosto(int fila,int numero) throws Exception{
+     public String sceltaPosto(int fila,int numero) throws PostoException{
           return partitaScelta.sceltaPosto(fila,numero);
      }
      
@@ -110,7 +110,7 @@ public class TifoTicket {
           System.out.println(bi);
      }
      
-     public int settoreAbbonamento(String nomeSettore) throws Exception{
+     public int settoreAbbonamento(String nomeSettore) throws SettoreException{
           Settore se=stadio.sceltaSettore(nomeSettore);
           int posti_liberi= se.getCapienza()-se.getListaAbbonamenti().size();
           if(nomeSettore.contains("Tribuna"))
@@ -118,15 +118,14 @@ public class TifoTicket {
           return posti_liberi;
      }
      
-     public void datiClienteAbb(String nominativo,String CF,int eta) throws Exception{
+     public void datiClienteAbb(String nominativo,String CF,int eta) throws datiClienteException{
           stadio.datiClienteAbb(nominativo,CF,eta);
      }
      
-     public void postoAbbonamento(int fila,int numero) throws Exception{
+     public void postoAbbonamento(int fila,int numero) throws PostoException{
           Posto po=stadio.postoAbbonamento(fila,numero);
           if(po!=null)
                System.out.println("Posto scelto correttamente");
-          
      }
 
      public Abbonamento confermaAbbonamento(){
@@ -147,8 +146,7 @@ public class TifoTicket {
                counterTot+=counter;
                incassoTot+=incasso;
                System.out.println("Partita: Furci vs. "+pa.getAvversario()+", partita di: "+pa.getTipologia()+
-               " del "+pa.getData().getDayOfMonth()+"/"
-               +pa.getData().getMonthValue()+"/"+pa.getData().getYear()
+               " del "+pa.getData().getDayOfMonth()+"/"+pa.getData().getMonthValue()+"/"+pa.getData().getYear()
                +"\nBiglietti venduti: "+counter+"/"+stadio.getCapienza()+", Incasso: € "+incasso+"\n");
           }
           System.out.println("Totale biglietti venduti: "+counterTot+", Incasso totale: € "+incassoTot);
@@ -157,7 +155,7 @@ public class TifoTicket {
      public void getVenditePartita(String codicePartita){
           Partita pa=listaPartite.get(codicePartita);
           for(Map.Entry<String,Settore> entry : pa.getStadio().getListaSettori().entrySet()){
-               double incasso=0.00;
+               float incasso=0;
                for(Biglietto bi: entry.getValue().getListaBiglietti())
                     incasso+=bi.getPrezzo();
                System.out.println("Biglietti venduti in "+entry.getValue().getNome()+": "
@@ -165,7 +163,7 @@ public class TifoTicket {
           }
      }
      
-     public Biglietto sostituzioneNominativo(String codiceBiglietto,String codicePartita,String nuovoNom,int nuovaEta){
+     public Biglietto sostituzioneNominativo(String codiceBiglietto,String codicePartita,String nuovoNom,int nuovaEta) throws NominativoException{
           Partita pa= listaPartite.get(codicePartita);
           Biglietto bi= pa.sostituzioneNominativo(codiceBiglietto,nuovoNom,nuovaEta);
           return bi; 

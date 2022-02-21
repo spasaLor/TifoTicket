@@ -5,6 +5,10 @@
  */
 package com.Tifoticket;
 
+import com.Tifoticket.domain.Stadio;
+import com.Tifoticket.domain.Partita;
+import exceptions.NominativoException;
+import exceptions.PostoException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -64,7 +68,7 @@ import org.junit.jupiter.api.Test;
                //FALLISCE PERCHE' SCELGO UN POSTO CHE NON ESISTE
                pa.sceltaPosto(2, 1);
                fail();
-          } catch (Exception ex) {
+          } catch (PostoException ex) {
                System.err.println("Expectd error: "+ex.getMessage());
           }
          
@@ -94,24 +98,25 @@ import org.junit.jupiter.api.Test;
            //NON HO INSERITO NESSUN BIGLIETTO QUINDI NON POSSO EFFETTUARE LA SOSTITUZIONE
            try{
                 assertNull(pa.sostituzioneNominativo("aaa", "Marco Spadaro", 50));
+                fail();
            }
-           catch(Exception e ){
-                System.out.println("Unexpected error: "+e.getMessage());
+           catch(NominativoException e ){
+                System.out.println("Expected error: "+e.getMessage());
            }
            try{//FLUSSO CORRETTO
                 pa.sceltaSettore("Curva Sud");
                 pa.datiCliente("Lorenzo spadaro", 70);
                 pa.confermaAcquisto();
                 assertNotNull(pa.sostituzioneNominativo(pa.getListaBiglietti().get(0).getCodice(), "Marco Spadaro", 71));
-                
            }catch (Exception ex) {
                System.out.println("Unexpected error: "+ex.getMessage()); 
            }
           
            try {//STO PROVANDO A FARE UNA SOSTITUZIONE NOMINATIVO MA CON 2 TARIFFE DIVERSE
              assertNull(pa.sostituzioneNominativo(pa.getListaBiglietti().get(0).getCodice(), "Marco Spadaro", 10));
-          } catch (Exception ex) {
-               System.err.println("Unexpected error: "+ex.getMessage());
+             fail();
+          } catch (NominativoException ex) {
+               System.err.println("Expected error: "+ex.getMessage());
           }
       }
 }
