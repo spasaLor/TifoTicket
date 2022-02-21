@@ -12,9 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.ConcurrentModificationException;
-import java.util.List;
 import java.util.Map;
 /**
  *
@@ -31,7 +29,7 @@ public class Main {
           System.out.println("5. Visualizza informazioni vendite per una specifica partita");
           System.out.println("6. Visualizza informazioni vendite biglietti complessive");
           System.out.println("7. USCITA");
-          System.out.println("Scelta-> ");
+          System.out.println("Scegli l'operazione: ");
      }
      
      public static void main(String args[]){
@@ -41,6 +39,7 @@ public class Main {
           
           do{
                try {
+                    System.out.println("\n\tTIFOTICKET");
                     stampaMenu();
                     scelta = Integer.parseInt(br.readLine());
                     switch(scelta){
@@ -248,7 +247,10 @@ public class Main {
                               tifoticket.getDatiVenditeTotali();
                               break;
                          case 7:
-                              System.out.println("Ciao ciao");
+                              System.out.println("\nCiao ciao");
+                              break;
+                         default:
+                              System.out.println("\nScelta non valida");
                               break;
                     }
                } catch (IOException ex) {
