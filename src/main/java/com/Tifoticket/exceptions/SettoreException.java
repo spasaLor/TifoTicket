@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exceptions;
+package com.Tifoticket.exceptions;
 
 /**
  *
  * @author arcap
  */
-public class datiClienteException extends Exception{
-     
-     public datiClienteException(String errorMessage){
-          super(errorMessage);
+public class SettoreException extends Exception{
+     public SettoreException(String messageError){
+          super(messageError);
      }
 }

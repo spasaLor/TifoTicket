@@ -6,7 +6,7 @@
 package com.Tifoticket;
 
 import com.Tifoticket.domain.Tribuna;
-import exceptions.PostoException;
+import com.Tifoticket.exceptions.PostoException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;

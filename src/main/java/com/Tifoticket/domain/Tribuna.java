@@ -1,6 +1,6 @@
 package com.Tifoticket.domain;
 
-import exceptions.PostoException;
+import com.Tifoticket.exceptions.PostoException;
 import java.util.ArrayList;
 import java.util.List;
 

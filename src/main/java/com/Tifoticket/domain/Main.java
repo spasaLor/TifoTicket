@@ -5,11 +5,11 @@
  */
 package com.Tifoticket.domain;
 
-import exceptions.NominativoException;
-import exceptions.PartitaException;
-import exceptions.PostoException;
-import exceptions.SettoreException;
-import exceptions.datiClienteException;
+import com.Tifoticket.exceptions.NominativoException;
+import com.Tifoticket.exceptions.PartitaException;
+import com.Tifoticket.exceptions.PostoException;
+import com.Tifoticket.exceptions.SettoreException;
+import com.Tifoticket.exceptions.datiClienteException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

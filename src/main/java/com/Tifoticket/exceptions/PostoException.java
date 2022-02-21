@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exceptions;
+package com.Tifoticket.exceptions;
 
 /**
  *
  * @author arcap
  */
-public class NominativoException extends Exception{
- 
-     public NominativoException(String errorMessage){
-          super(errorMessage);
-     }
+public class PostoException extends Exception{
+     
+     public PostoException(String errorMessage) {  
+          super(errorMessage);  
+    } 
+     
 }

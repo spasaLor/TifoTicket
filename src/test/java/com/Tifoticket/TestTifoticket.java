@@ -6,9 +6,9 @@
 package com.Tifoticket;
 
 import com.Tifoticket.domain.TifoTicket;
-import exceptions.PartitaException;
-import exceptions.PostoException;
-import exceptions.SettoreException;
+import com.Tifoticket.exceptions.PartitaException;
+import com.Tifoticket.exceptions.PostoException;
+import com.Tifoticket.exceptions.SettoreException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

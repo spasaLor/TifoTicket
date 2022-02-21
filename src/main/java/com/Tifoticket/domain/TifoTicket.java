@@ -1,10 +1,10 @@
 package com.Tifoticket.domain;
 
-import exceptions.NominativoException;
-import exceptions.PartitaException;
-import exceptions.PostoException;
-import exceptions.SettoreException;
-import exceptions.datiClienteException;
+import com.Tifoticket.exceptions.NominativoException;
+import com.Tifoticket.exceptions.PartitaException;
+import com.Tifoticket.exceptions.PostoException;
+import com.Tifoticket.exceptions.SettoreException;
+import com.Tifoticket.exceptions.datiClienteException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +36,8 @@ public class TifoTicket {
                        if(tipologia.equals("Campionato"))
                          this.partitaCorrente= new Partita(codice,data,avversario,tipologia,stadio);
                        else
-                            this.partitaCorrente=new Partita(codice,data,avversario,tipologia,null);
-                        System.out.println("Partita inserita");
+                         this.partitaCorrente=new Partita(codice,data,avversario,tipologia,null);
+                       System.out.println("Partita inserita");
                    }
                   else
                        throw new PartitaException("Errore nell'immissione della tipologia.");

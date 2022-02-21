@@ -1,8 +1,8 @@
 package com.Tifoticket.domain;
 
-import exceptions.NominativoException;
-import exceptions.PostoException;
-import exceptions.SettoreException;
+import com.Tifoticket.exceptions.NominativoException;
+import com.Tifoticket.exceptions.PostoException;
+import com.Tifoticket.exceptions.SettoreException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

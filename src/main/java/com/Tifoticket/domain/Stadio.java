@@ -1,8 +1,8 @@
 package com.Tifoticket.domain;
 
-import exceptions.PostoException;
-import exceptions.SettoreException;
-import exceptions.datiClienteException;
+import com.Tifoticket.exceptions.PostoException;
+import com.Tifoticket.exceptions.SettoreException;
+import com.Tifoticket.exceptions.datiClienteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

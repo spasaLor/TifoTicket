@@ -7,8 +7,8 @@ package com.Tifoticket;
 
 import com.Tifoticket.domain.Stadio;
 import com.Tifoticket.domain.Partita;
-import exceptions.NominativoException;
-import exceptions.PostoException;
+import com.Tifoticket.exceptions.NominativoException;
+import com.Tifoticket.exceptions.PostoException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

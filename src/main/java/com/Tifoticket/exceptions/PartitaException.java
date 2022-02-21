@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exceptions;
+package com.Tifoticket.exceptions;
 
 /**
  *
  * @author arcap
  */
-public class PostoException extends Exception{
+public class PartitaException extends Exception {  
      
-     public PostoException(String errorMessage) {  
+    public PartitaException(String errorMessage) {  
           super(errorMessage);  
-    } 
-     
+    }  
 }

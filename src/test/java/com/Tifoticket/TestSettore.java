@@ -7,8 +7,8 @@ package com.Tifoticket;
 
 import com.Tifoticket.domain.Settore;
 import com.Tifoticket.domain.Tribuna;
-import exceptions.PostoException;
-import exceptions.datiClienteException;
+import com.Tifoticket.exceptions.PostoException;
+import com.Tifoticket.exceptions.datiClienteException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
