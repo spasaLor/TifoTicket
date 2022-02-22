@@ -63,26 +63,6 @@ import org.junit.jupiter.api.Test;
       }
       
      @Test
-      void testListaPartite(){
-          LocalDate ld= LocalDate.parse("2022-05-06");
-          LocalTime lt= LocalTime.parse("20:45");
-          LocalDateTime data=LocalDateTime.of(ld,lt);
-          Partita pa=new Partita("AAA111",data,"MILAN","CAMPIONATO",st);
-          
-          ld= LocalDate.parse("2022-08-06");
-          LocalDateTime data2= LocalDateTime.of(ld,lt);
-          Partita pa2=new Partita("AAA112",data2,"INTER","CAMPIONATO",st);
-          
-          ArrayList lp= new ArrayList<Partita>();
-          lp.add(pa);
-          lp.add(pa2);
-          //VERIFICO CHE LE PARTITE SIANO STATE INSERITE CORRETTAMENTE
-          st.setListaPartite(lp);
-          assertEquals(2,st.getListaPartite().size());
-          assertNotNull(st.getListaPartite().get(0));
-     }
-
-     @Test
       void testElencoDisponibili(){
           try {
                st.sceltaSettore("Tribuna Est");

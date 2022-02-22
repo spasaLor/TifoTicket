@@ -3,7 +3,6 @@ package com.Tifoticket.domain;
 import com.Tifoticket.exceptions.PostoException;
 import com.Tifoticket.exceptions.SettoreException;
 import com.Tifoticket.exceptions.datiClienteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +11,13 @@ public class Stadio {
     private String nome;
     private int capienza;
     private Map<String,Settore> listaSettori;
-    private ArrayList<Partita> listaPartite;
     private Settore settoreScelto;
-
+    private Partita partita;    
+    
     public Stadio(String nome, int capienza) {
-        listaSettori=new HashMap<>();
-        listaPartite=new ArrayList<>(); 
         this.nome = nome;
         this.capienza = capienza;
         this.listaSettori=new HashMap<>();
-        this.listaPartite= new ArrayList<>();
         loadSettori();
     }
 
@@ -111,14 +107,6 @@ public class Stadio {
         this.capienza = capienza;
     }
 
-    public ArrayList<Partita> getListaPartite() {
-        return listaPartite;
-    }  
-    
-    public void setListaPartite(ArrayList<Partita> listaPartite) {
-        this.listaPartite = listaPartite;
-    }
-    
      public Settore getSettoreScelto() {
           return settoreScelto;
      }
@@ -126,5 +114,14 @@ public class Stadio {
      public void setSettoreScelto(Settore settoreScelto) {
           this.settoreScelto = settoreScelto;
      }
-    
+
+     public Partita getPartita() {
+          return partita;
+     }
+
+     public void setPartita(Partita partita) {
+          this.partita = partita;
+     }
+
+
 }
